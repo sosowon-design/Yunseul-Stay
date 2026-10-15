@@ -1,0 +1,6 @@
+{
+  "name": "윤슬 (YUNSEUL)",
+  "description": "강릉 바다 앞, 미니멀리즘과 파도 소리가 머무는 프리미엄 감성 숙소",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

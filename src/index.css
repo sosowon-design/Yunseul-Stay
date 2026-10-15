@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&family=Noto+Serif:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Noto Serif KR", "Noto Serif", serif;
+  --font-serif: "Noto Serif KR", "Noto Serif", serif;
+  --font-display: "Cormorant Garamond", "Noto Serif KR", serif;
+  --font-cormorant: "Cormorant Garamond", "Noto Serif KR", serif;
+  --font-korean-body: "Noto Serif KR", "Noto Serif", serif;
+  --font-inter: "Cormorant Garamond", "Noto Serif KR", serif;
+  --font-lato: "Noto Serif KR", "Noto Serif", serif;
+
+  --color-pure-white: #F7F5F0;
+  --color-soft-gray: #E3DED4;
+  --color-deep-ink: #282522;
+  --color-accent-gold: #7B6248;
+  --color-accent-blue: #7B6248;
+  --color-accent-blue-hover: #634E39;
+  --color-muted-blue: #9D856D;
+  --color-pine-green: #7B6248;
+  --color-sage-green: #8C755E;
+}
+
+@layer base {
+  body {
+    @apply bg-pure-white text-deep-ink antialiased font-serif;
+    font-family: "Noto Serif KR", "Noto Serif", serif;
+    font-size: 13px;
+    line-height: 1.6;
+    letter-spacing: 0.005em;
+    background-color: #F7F5F0;
+    color: #282522;
+  }
+
+  h1, h2, h3, h4, h5, h6, .serif {
+    @apply font-serif font-light tracking-[0.02em];
+    font-family: "Noto Serif KR", "Noto Serif", serif;
+  }
+}
+
+@layer utilities {
+  .font-cormorant {
+    font-family: "Cormorant Garamond", "Noto Serif", serif;
+  }
+
+  .font-noto-serif-kr {
+    font-family: "Noto Serif KR", "Noto Serif", serif;
+  }
+
+  .text-micro {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  
+  .text-small {
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  .glass {
+    @apply bg-white/50 backdrop-blur-xl border border-white/40;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 3px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-[#7B6248]/25 rounded-full;
+  }
+}
+
+/* Continuous natural movement animations for images without hovering (strictly no horizontal/left-right movement) */
+@keyframes naturalBreathe1 {
+  0% {
+    transform: scale(1.0) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.045) translate3d(0, -0.6%, 0);
+  }
+}
+
+@keyframes naturalBreathe2 {
+  0% {
+    transform: scale(1.01) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.05) translate3d(0, 0.5%, 0);
+  }
+}
+
+@keyframes naturalBreathe3 {
+  0% {
+    transform: scale(1.0) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.038) translate3d(0, -0.4%, 0);
+  }
+}
+
+.natural-motion-img,
+main img:not(.no-motion),
+header img:not(.no-motion) {
+  animation: naturalBreathe1 15s ease-in-out infinite alternate;
+  will-change: transform;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.natural-motion-img-alt,
+main .grid > div:nth-child(even) img,
+main section:nth-child(even) img {
+  animation: naturalBreathe2 18s ease-in-out infinite alternate;
+}
+
+.natural-motion-img-slow,
+main .grid > div:nth-child(3n) img,
+main section:nth-child(3n) img {
+  animation: naturalBreathe3 22s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .natural-motion-img,
+  .natural-motion-img-alt,
+  .natural-motion-img-slow,
+  main img,
+  header img {
+    animation: none !important;
+  }
+}
+
+

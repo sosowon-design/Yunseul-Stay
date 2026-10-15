@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUNSEUL STAY - Exclusive Stay by the Sea</title>
+    <!-- Tailwind CSS, Pretendard, and Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Noto+Serif+KR:wght@200;300;400;500&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Leaflet Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Pretendard", "sans-serif"],
+                        serif: ["Cormorant Garamond", "Gowun Batang", "serif"],
+                        display: ["Cormorant Garamond", "Noto Serif KR", "serif"]
+                    },
+                    colors: {
+                        gold: '#C5A059',
+                        ink: '#111111',
+                        softGray: '#FAF9F6'
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            background-color: #FAF9F6;
+            color: #111111;
+            font-family: "Pretendard", sans-serif;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+        }
+        .font-serif-custom {
+            font-family: "Cormorant Garamond", "Gowun Batang", serif;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(17, 17, 17, 0.05);
+        }
+        #leaflet-map {
+            height: 400px;
+            width: 100%;
+            z-index: 10;
+        }
+        .custom-scroller::-webkit-scrollbar { width: 3px; }
+        .custom-scroller::-webkit-scrollbar-thumb { background-color: #C5A059; }
+        .lp-vinyl-spin {
+            animation: spin 18s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="selection:bg-gold/10 selection:text-gold antialiased">
+
+    <!-- 1. HEADER & NAVIGATION -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-700 py-8 text-white bg-transparent">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+            <button onclick="changePage('home')" class="text-2xl font-serif-custom tracking-[0.2em] font-light hover:opacity-75 transition-all" id="nav-logo">
+                YUNSEUL
+            </button>
+            <div class="hidden md:flex items-center space-x-10 text-[11px] uppercase tracking-[0.25em] font-medium" id="nav-links">
+                <button onclick="changePage('story')" class="hover:text-gold transition-colors duration-300">About</button>
+                <button onclick="changePage('rooms')" class="hover:text-gold transition-colors duration-300">Rooms</button>
+                <button onclick="changePage('special')" class="hover:text-gold transition-colors duration-300">Special</button>
+                <button onclick="changePage('experience')" class="hover:text-gold transition-colors duration-300">Experience</button>
+                <button onclick="changePage('location')" class="hover:text-gold transition-colors duration-300">Directions</button>
+                <button onclick="openBooking()" class="border border-white/20 px-6 py-2 bg-transparent hover:bg-white hover:text-ink hover:border-white transition-all font-bold duration-500 rounded-sm">Booking</button>
+            </div>
+            <!-- Mobile Menu Trigger -->
+            <button class="md:hidden" id="menu-trigger" onclick="toggleMobileMenu(true)">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Side Overlay Navigation -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-white/95 z-[100] hidden flex flex-col p-8 transition-all duration-500">
+        <div class="flex justify-between items-center mb-16">
+            <span class="text-xl font-serif-custom tracking-[0.2em] font-light">YUNSEUL</span>
+            <button onclick="toggleMobileMenu(false)" class="text-ink">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div class="flex flex-col space-y-6 text-lg tracking-[0.15em] font-serif-custom text-left">
+            <button onclick="changePage('story'); toggleMobileMenu(false);" class="border-b border-gray-100 pb-3 hover:text-gold">Philosophy</button>
+            <button onclick="changePage('rooms'); toggleMobileMenu(false);" class="border-b border-gray-100 pb-3 hover:text-gold">Exclusive Rooms</button>
+            <button onclick="changePage('special'); toggleMobileMenu(false);" class="border-b border-gray-100 pb-3 hover:text-gold">Special Services</button>
+            <button onclick="changePage('experience'); toggleMobileMenu(false);" class="border-b border-gray-100 pb-3 hover:text-gold">Wellness Ritual</button>
+            <button onclick="changePage('location'); toggleMobileMenu(false);" class="border-b border-gray-100 pb-3 hover:text-gold">Directions Map</button>
+            <button onclick="openBooking(); toggleMobileMenu(false);" class="bg-ink text-white text-center py-4 tracking-widest text-sm font-bold uppercase mt-4">Book Now</button>
+        </div>
+    </div>
+
+    <!-- 2. MAIN PAGES VIEW CONTAINER -->
+    <main class="min-h-screen">
+
+        <!-- ================= HOME VIEW ================= -->
+        <section id="view-home" class="page-view flex flex-col">
+            <!-- Hero Header Banner -->
+            <header class="relative h-screen flex items-center justify-center overflow-hidden bg-ink">
+                <div class="absolute inset-0 z-0">
+                    <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=1920&q=80" alt="YUNSEUL STAY" class="w-full h-full object-cover opacity-70">
+                </div>
+                <div class="absolute inset-0 bg-black/20 z-[1]"></div>
+                <div class="relative z-10 text-center space-y-10 px-6 text-white">
+                    <span class="text-[10px] tracking-[0.6em] text-white/80 uppercase font-sans font-medium block">EMOTIONAL PRIVATE STAY & HEALING</span>
+                    <h1 class="text-3xl md:text-5xl font-display uppercase tracking-[0.2em] leading-tight font-light">
+                        YUNSEUL<br>
+                        <span class="text-xs md:text-sm tracking-[0.5em] font-sans font-light opacity-85">STAY BY THE SEA</span>
+                    </h1>
+                    <div class="w-16 h-px bg-gold mx-auto mt-16"></div>
+                </div>
+                <div class="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center space-y-3">
+                    <span class="text-[11px] text-white/40 tracking-[0.4em] uppercase font-bold">Scroll</span>
+                    <div class="w-px h-12 bg-white/20 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1/2 bg-gold animate-pulse"></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Home Intro Section -->
+            <section class="py-32 px-6 md:px-12 lg:px-24 bg-white border-b border-gray-100">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                    <div class="lg:col-span-5 space-y-10">
+                        <div class="space-y-4">
+                            <span class="text-[10px] tracking-[0.6em] text-gold uppercase font-bold block">Introduction</span>
+                            <h2 class="text-3xl md:text-4xl font-serif-custom leading-tight text-ink uppercase tracking-wide font-light">
+                                바다와 마주하는<br>고요한 안식의 시작
+                            </h2>
+                        </div>
+                        <div class="flex gap-6 items-stretch">
+                            <div class="w-0.5 bg-gold/40 shrink-0"></div>
+                            <p class="text-base font-serif-custom italic text-ink/90 font-light leading-relaxed">
+                                "비움으로써 마주하는 깊은 평온,<br>자연의 소리만이 나지막이 울리는 여백의 시간."
+                            </p>
+                        </div>
+                        <p class="text-ink/75 text-xs md:text-sm leading-relaxed font-serif-custom font-light">
+                            동해바다의 푸른 숨결과 은은하게 부서지는 빛결이 머무는 윤슬 스테이입니다. 헌화로 해안선의 잔잔한 파도 소리를 조용한 동반자 삼아 일상의 피로를 내려놓으세요.
+                        </p>
+                        <div class="pt-4">
+                            <button onclick="changePage('story')" class="text-[10.5px] tracking-[0.25em] uppercase border-b-2 border-ink/10 pb-2 flex items-center hover:text-gold hover:border-gold transition-all duration-300 font-bold">
+                                Explore Story &rarr;
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-7 relative w-full">
+                        <div class="aspect-[16/10] w-full overflow-hidden rounded-md shadow-2xl relative bg-softGray border border-gray-200">
+                            <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1200&q=80" alt="YUNSEUL Architecture" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exclusive Spaces Grid Showcase -->
+            <section class="py-28 px-6 md:px-12 bg-softGray border-b border-gray-200">
+                <div class="max-w-7xl mx-auto space-y-16">
+                    <div class="text-center space-y-4 max-w-2xl mx-auto flex flex-col items-center">
+                        <span class="text-[10px] tracking-[0.4em] text-gold uppercase font-bold block">Exclusive Spaces</span>
+                        <h2 class="text-2xl md:text-3xl font-serif-custom text-ink uppercase tracking-wider font-light">
+                            오롯이 당신만을 위한 공간
+                        </h2>
+                        <div class="w-12 h-px bg-gold mx-auto mt-4"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Space 1 -->
+                        <div onclick="goToRoom('room-1')" class="group relative overflow-hidden rounded-lg cursor-pointer h-[480px] shadow-lg border border-gray-200 transition-all duration-500">
+                            <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80" alt="1F Garden Lounge" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+                            <div class="absolute inset-0 p-8 flex flex-col justify-end text-white space-y-2 z-10">
+                                <span class="text-[9px] tracking-widest text-gold uppercase font-bold">Space 01</span>
+                                <h3 class="text-base font-serif-custom tracking-widest text-white leading-tight font-medium">1F GARDEN LOUNGE</h3>
+                                <p class="text-xs text-white/75 font-light font-serif-custom">정원과 마주한 한가로운 차 한 모금</p>
+                                <span class="text-[9px] tracking-wider uppercase border-b border-white/40 pb-0.5 pt-3 group-hover:border-white">View More &rarr;</span>
+                            </div>
+                        </div>
+                        <!-- Space 2 -->
+                        <div onclick="goToRoom('room-2')" class="group relative overflow-hidden rounded-lg cursor-pointer h-[480px] shadow-lg border border-gray-200 transition-all duration-500 lg:translate-y-6">
+                            <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80" alt="2F Ocean Bedroom" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+                            <div class="absolute inset-0 p-8 flex flex-col justify-end text-white space-y-2 z-10">
+                                <span class="text-[9px] tracking-widest text-gold uppercase font-bold">Space 02</span>
+                                <h3 class="text-base font-serif-custom tracking-widest text-white leading-tight font-medium">2F OCEAN BEDROOM</h3>
+                                <p class="text-xs text-white/75 font-light font-serif-custom">눈앞에 펼쳐지는 푸른 해돋이와 숙면</p>
+                                <span class="text-[9px] tracking-wider uppercase border-b border-white/40 pb-0.5 pt-3 group-hover:border-white">View More &rarr;</span>
+                            </div>
+                        </div>
+                        <!-- Space 3 -->
+                        <div onclick="goToRoom('room-3')" class="group relative overflow-hidden rounded-lg cursor-pointer h-[480px] shadow-lg border border-gray-200 transition-all duration-500">
+                            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" alt="Sunrise Heated Pool" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+                            <div class="absolute inset-0 p-8 flex flex-col justify-end text-white space-y-2 z-10">
+                                <span class="text-[9px] tracking-widest text-gold uppercase font-bold">Space 03</span>
+                                <h3 class="text-base font-serif-custom tracking-widest text-white leading-tight font-medium">SUNRISE HEATED POOL</h3>
+                                <p class="text-xs text-white/75 font-light font-serif-custom">사계절 따뜻한 바다의 숨결에 안기는 물결</p>
+                                <span class="text-[9px] tracking-wider uppercase border-b border-white/40 pb-0.5 pt-3 group-hover:border-white">View More &rarr;</span>
+                            </div>
+                        </div>
+                        <!-- Space 4 -->
+                        <div onclick="goToRoom('room-4')" class="group relative overflow-hidden rounded-lg cursor-pointer h-[480px] shadow-lg border border-gray-200 transition-all duration-500 lg:translate-y-6">
+                            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80" alt="Silent Attic Study" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+                            <div class="absolute inset-0 p-8 flex flex-col justify-end text-white space-y-2 z-10">
+                                <span class="text-[9px] tracking-widest text-gold uppercase font-bold">Space 04</span>
+                                <h3 class="text-base font-serif-custom tracking-widest text-white leading-tight font-medium">SILENT ATTIC STUDY</h3>
+                                <p class="text-xs text-white/75 font-light font-serif-custom">천장의 창 너머 밤하늘 은하수 명상 서재</p>
+                                <span class="text-[9px] tracking-wider uppercase border-b border-white/40 pb-0.5 pt-3 group-hover:border-white">View More &rarr;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- A Day of Healing slider -->
+            <section class="bg-white py-32 border-b border-gray-100">
+                <div class="max-w-7xl mx-auto px-6 md:px-12">
+                    <div class="text-center space-y-4 max-w-2xl mx-auto mb-16 flex flex-col items-center">
+                        <span class="text-[10px] tracking-[0.5em] text-gold uppercase font-bold">A DAY OF HEALING</span>
+                        <h2 class="text-2xl md:text-3xl font-serif-custom font-light text-ink">윤슬에서의 온전한 하루 조각</h2>
+                        <div class="w-12 h-px bg-gold mt-4"></div>
+                    </div>
+
+                    <div class="max-w-5xl mx-auto space-y-8">
+                        <div class="relative overflow-hidden rounded-lg shadow-2xl aspect-[21/9] bg-ink flex items-end">
+                            <img id="healing-slide-img" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&h=600&q=80" alt="Healing scene" class="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                            <div class="relative z-10 p-8 md:p-12 text-white space-y-2 max-w-lg">
+                                <span id="healing-slide-time" class="text-gold font-mono text-[11px] tracking-widest font-bold">08:00 AM</span>
+                                <h4 id="healing-slide-title" class="text-xl md:text-2xl font-serif-custom font-light">아침 다도와 따뜻한 차 한 잔</h4>
+                                <p id="healing-slide-desc" class="text-xs text-white/75 font-light font-serif-custom leading-relaxed">수평선 위로 오롯이 쏟아지는 아침 햇살을 듬뿍 맞으며 은은히 우려진 꽃차로 영혼을 일깨웁니다.</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center space-x-4">
+                            <button onclick="setHealingSlide(0)" class="w-3 h-3 rounded-full bg-gold cursor-pointer transition-colors duration-300" id="healing-dot-0"></button>
+                            <button onclick="setHealingSlide(1)" class="w-3 h-3 rounded-full bg-gray-200 cursor-pointer transition-colors duration-300" id="healing-dot-1"></button>
+                            <button onclick="setHealingSlide(2)" class="w-3 h-3 rounded-full bg-gray-200 cursor-pointer transition-colors duration-300" id="healing-dot-2"></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ================= ABOUT / STORY VIEW ================= -->
+        <section id="view-story" class="page-view hidden bg-white text-ink pt-32 pb-24">
+            <div class="max-w-5xl mx-auto px-6">
+                <div class="text-center space-y-6 mb-24">
+                    <span class="text-[10px] tracking-[0.6em] text-gold uppercase font-bold">Philosophy of Rest</span>
+                    <h2 class="text-3xl md:text-4xl font-display font-light uppercase tracking-widest">Our Story</h2>
+                    <div class="w-12 h-px bg-gold mx-auto mt-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                    <div class="lg:col-span-5 space-y-8">
+                        <div class="space-y-3">
+                            <span class="text-[10px] tracking-[0.5em] text-gold uppercase font-bold block">Space Poetics</span>
+                            <h3 class="text-3xl font-serif-custom text-ink font-light leading-tight">
+                                수평과 수직,<br>그리고 바다의 프레임
+                            </h3>
+                        </div>
+                        <div class="w-12 h-px bg-gold"></div>
+                        <div class="space-y-4 text-xs md:text-sm text-ink/75 font-serif-custom font-light leading-relaxed">
+                            <p>윤슬 스테이의 건축은 동해의 아름답고 가없는 수평선과 자연스럽게 호흡하도록 지어졌습니다.</p>
+                            <p>묵직하고 정직하게 빚어진 노출 콘크리트는 세차게 몰아치는 비바람을 견고하게 막아주어, 건물 내부에 머무는 투숙객에게 완벽한 안식과 무해한 안도감을 선물합니다.</p>
+                            <p>천연 오크의 안락한 질감과 와이드 유리 액자로 채워지는 사색의 풍경은 시각의 한계를 넘어 자연과 완벽히 동화되는 황홀함을 약속합니다.</p>
+                        </div>
+                        <div class="pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-left font-serif-custom text-xs">
+                            <div>
+                                <span class="block text-gold font-bold text-[10px] tracking-wider uppercase mb-1">ARCHITECT</span>
+                                Studio YUNSEUL
+                            </div>
+                            <div>
+                                <span class="block text-gold font-bold text-[10px] tracking-wider uppercase mb-1">COMPLETED</span>
+                                2026. SPRING
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-7">
+                        <div class="aspect-[4/3] rounded-lg overflow-hidden shadow-2xl relative">
+                            <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1200&q=80" alt="Architecture story" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Three Core Values: Emptying, Filling, Engraving (Bottom of Story) -->
+                <div class="mt-32 pt-24 border-t border-gray-100 space-y-16">
+                    <div class="text-center mb-16">
+                        <span class="text-[10px] tracking-[0.5em] text-gold font-bold uppercase">BRAND VALUES</span>
+                        <h4 class="text-xl md:text-2xl font-serif-custom font-light mt-2">안식의 삼단계 (Three Pillars of Rest)</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                        <!-- Pillar 01 -->
+                        <div class="space-y-6">
+                            <div class="aspect-square bg-cover bg-center overflow-hidden rounded-md shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=80" alt="Emptying" class="w-full h-full object-cover">
+                            </div>
+                            <div class="space-y-2">
+                                <span class="text-gold font-mono font-bold text-xs block">01 / EMPTYING</span>
+                                <h5 class="text-base font-serif-custom text-ink font-semibold">비움 (Emptying)</h5>
+                                <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">일상의 복잡하고 부차적인 생각과 피로를 파도 소리에 조용히 실어 완벽하게 마음을 덜어내는 단계입니다.</p>
+                            </div>
+                        </div>
+                        <!-- Pillar 02 -->
+                        <div class="space-y-6">
+                            <div class="aspect-square bg-cover bg-center overflow-hidden rounded-md shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1600&q=80" alt="Filling" class="w-full h-full object-cover">
+                            </div>
+                            <div class="space-y-2">
+                                <span class="text-gold font-mono font-bold text-xs block">02 / FILLING</span>
+                                <h5 class="text-base font-serif-custom text-ink font-semibold">채움 (Filling)</h5>
+                                <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">따뜻하게 차오르는 아침 해돋이, 정갈한 다도차 향기, 아날로그 선율로 마음을 온전히 긍정으로 가득 매웁니다.</p>
+                            </div>
+                        </div>
+                        <!-- Pillar 03 -->
+                        <div class="space-y-6">
+                            <div class="aspect-square bg-cover bg-center overflow-hidden rounded-md shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80" alt="Engraving" class="w-full h-full object-cover">
+                            </div>
+                            <div class="space-y-2">
+                                <span class="text-gold font-mono font-bold text-xs block">03 / ENGRAVING</span>
+                                <h5 class="text-base font-serif-custom text-ink font-semibold">새김 (Engraving)</h5>
+                                <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">머무는 시공간의 모든 평화로운 조각들과 기억들을 인생의 소중한 페이지에 영구히 소장하여 새겨갑니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ROOMS VIEW ================= -->
+        <section id="view-rooms" class="page-view hidden bg-white text-ink pt-32 pb-24">
+            <div class="max-w-5xl mx-auto px-6">
+                <div class="text-center space-y-6 mb-24">
+                    <span class="text-[10px] tracking-[0.6em] text-gold uppercase font-bold">Exclusive Suites</span>
+                    <h2 class="text-3xl md:text-4xl font-display font-light uppercase tracking-widest">Our Rooms</h2>
+                    <div class="w-12 h-px bg-gold mx-auto mt-4"></div>
+                </div>
+
+                <!-- Rooms List (Hardcoded for maximum speed and SEO) -->
+                <div class="space-y-36">
+                    <!-- Room 1 -->
+                    <div id="room-1" class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center scroll-mt-24">
+                        <div class="lg:col-span-7">
+                            <div class="aspect-[16/10] overflow-hidden shadow-2xl rounded-md relative group">
+                                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80" alt="1F GARDEN LOUNGE" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500">
+                            </div>
+                        </div>
+                        <div class="lg:col-span-5 space-y-6">
+                            <span class="text-[11px] uppercase tracking-[0.4em] text-gold font-bold">ZONE 01</span>
+                            <h2 class="text-2xl md:text-3xl font-serif-custom uppercase tracking-wider">1F GARDEN LOUNGE</h2>
+                            <p class="text-sm text-ink/75 font-serif-custom font-light leading-relaxed">
+                                정원과 바로 이어지는 1층 전면 통창 너머로 아침 새벽바람과 싱그러운 풀꽃 향기가 스며듭니다. 오크 질감으로 장식된 정갈한 다이닝 가든 테이블에서 소중한 차 사색의 여유를 나누세요.
+                            </p>
+                            <div class="py-4 border-t border-b border-gray-100 flex justify-between text-xs font-serif-custom">
+                                <div>
+                                    <span class="text-gold font-bold text-[9px] uppercase tracking-wider block mb-1">SPACE AREA</span>
+                                    1층 다이닝 & 라운지 전체 (약 35평)
+                                </div>
+                                <div>
+                                    <span class="text-gold font-bold text-[9px] uppercase tracking-wider block mb-1">CAPACITY</span>
+                                    기준 2인 / 최대 8인
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <span class="text-gold font-bold text-[9px] uppercase tracking-wider block">AMENITIES & SERVICES</span>
+                                <div class="flex flex-wrap gap-2 text-xs font-serif-custom text-ink/70">
+                                    <span>다도 세트, 아일랜드 키친, 편백 족욕탕, 뱅앤올룹슨 스피커</span>
+                                </div>
+                            </div>
+                            <button onclick="openBooking('room-1')" class="bg-ink text-white px-8 py-3.5 text-xs font-bold tracking-widest uppercase hover:bg-gold transition-colors rounded-sm w-full">Book This Space &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- Room 2 -->
+                    <div id="room-2" class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center scroll-mt-24">
+                        <div class="lg:col-span-7 lg:order-2">
+                            <div class="aspect-[16/10] overflow-hidden shadow-2xl rounded-md relative group">
+                                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80" alt="2F OCEAN BEDROOM" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500">
+                            </div>
+                        </div>
+                        <div class="lg:col-span-5 lg:order-1 space-y-6">
+                            <span class="text-[11px] uppercase tracking-[0.4em] text-gold font-bold">ZONE 02</span>
+                            <h2 class="text-2xl md:text-3xl font-serif-custom uppercase tracking-wider">2F OCEAN BEDROOM</h2>
+                            <p class="text-sm text-ink/75 font-serif-custom font-light leading-relaxed">
+                                완벽하고 드넓은 동해바다의 수평선을 와이드 전면 유리 프레임에 정갈하게 담았습니다. 최고급 오가닉 리넨 침구 속에서 나지막이 불어오는 잔잔한 파도 소리를 조용한 클래식 삼아 아늑한 숙면에 젖어 드는 단계입니다.
+                            </p>
+                            <div class="py-4 border-t border-b border-gray-100 flex justify-between text-xs font-serif-custom">
+                                <div>
+                                    <span class="text-gold font-bold text-[9px] uppercase tracking-wider block mb-1">SPACE AREA</span>
+                                    2층 슬리핑 존 & 가든 테라스 (약 30평)
+                                </div>
+                                <div>
+                                    <span class="text-gold font-bold text-[9px] uppercase tracking-wider block mb-1">CAPACITY</span>
+                                    기준 2인 / 최대 8인
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <span class="text-gold font-bold text-[9px] uppercase tracking-wider block">AMENITIES & SERVICES</span>
+                                <div class="flex flex-wrap gap-2 text-xs font-serif-custom text-ink/70">
+                                    <span>프리미엄 킹 침대, 오션뷰 자쿠지, 아날로그 서재, 테라스 선베드</span>
+                                </div>
+                            </div>
+                            <button onclick="openBooking('room-2')" class="bg-ink text-white px-8 py-3.5 text-xs font-bold tracking-widest uppercase hover:bg-gold transition-colors rounded-sm w-full">Book This Space &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- Room 3 -->
+                    <div id="room-3" class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center scroll-mt-24">
+                        <div class="lg:col-span-7">
+                            <div class="aspect-[16/10] overflow-hidden shadow-2xl rounded-md relative group">
+                                <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80" alt="SUNRISE HEATED POOL" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500">
+                            </div>
+                        </div>
+                        <div class="lg:col-span-5 space-y-6">
+                            <span class="text-[11px] uppercase tracking-[0.4em] text-gold font-bold">ZONE 03</span>
+                            <h2 class="text-2xl md:text-3xl font-serif-custom uppercase tracking-wider">SUNRISE HEATED POOL</h2>
+                            <p class="text-sm text-ink/75 font-serif-custom font-light leading-relaxed">
+                                바다 수평선과 따뜻한 풀의 물결이 구획 없이 유연하게 하나로 어우러지는 프라이빗 사계절 야외 온수 인피니티 풀입니다. 선베드에 비치는 아침 일출을 감상하며 머리를 비워내고 몸 가득 활기찬 온기를 채워보세요.
+                            </p>
+                            <div class="py-4 border-t border-b border-gray-100 flex justify-between text-xs font-serif-custom">
+                                <div>
+                                    <span class="text-gold font-bold text-[9px] uppercase tracking-wider block mb-1">SPACE AREA</span>
+                                    아웃도어 풀 & 인피니티 테라스 구역
+                                </div>
+                                <div>
+                                    <span class="text-gold font-bold text-[9px] uppercase tracking-wider block mb-1">CAPACITY</span>
+                                    기준 2인 / 최대 8인
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <span class="text-gold font-bold text-[9px] uppercase tracking-wider block">AMENITIES & SERVICES</span>
+                                <div class="flex flex-wrap gap-2 text-xs font-serif-custom text-ink/70">
+                                    <span>야외 4계절 온수 수영장, 루프탑 바, 선베드 & 웰컴 드링크</span>
+                                </div>
+                            </div>
+                            <button onclick="openBooking('room-3')" class="bg-ink text-white px-8 py-3.5 text-xs font-bold tracking-widest uppercase hover:bg-gold transition-colors rounded-sm w-full">Book This Space &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- Room 4 -->
+                    <div id="room-4" class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center scroll-mt-24">
+                        <div class="lg:col-span-7 lg:order-2">
+                            <div class="aspect-[16/10] overflow-hidden shadow-2xl rounded-md relative group">
+                                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80" alt="SILENT ATTIC STUDY" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500">
+                            </div>
+                        </div>
+                        <div class="lg:col-span-5 lg:order-1 space-y-6">
+                            <span class="text-[11px] uppercase tracking-[0.4em] text-gold font-bold">ZONE 04</span>
+                            <h2 class="text-2xl md:text-3xl font-serif-custom uppercase tracking-wider">SILENT ATTIC STUDY</h2>
+                            <p class="text-sm text-ink/75 font-serif-custom font-light leading-relaxed">
+                                다락 창으로 동해의 그윽한 별자리와 반짝이는 은하수를 누워서 고스낙히 바라보는 아늑한 공간. 편백 향 가득 퍼지는 목재 서재 테이블 위에 놓인 명저와 수제 찻잔이 오롯이 내면의 대화를 일깨워 줍니다.
+                            </p>
+                            <div class="py-4 border-t border-b border-gray-100 flex justify-between text-xs font-serif-custom">
+                                <div>
+                                    <span class="text-gold font-bold text-[9px] uppercase tracking-wider block mb-1">SPACE AREA</span>
+                                    최상층 시크릿 락방 아틀리에 (약 12평)
+                                </div>
+                                <div>
+                                    <span class="text-gold font-bold text-[9px] uppercase tracking-wider block mb-1">CAPACITY</span>
+                                    기준 2인 / 최대 8인
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <span class="text-gold font-bold text-[9px] uppercase tracking-wider block">AMENITIES & SERVICES</span>
+                                <div class="flex flex-wrap gap-2 text-xs font-serif-custom text-ink/70">
+                                    <span>독립 라이브러리, 천창 명상 구역, 수제 한차 다기, 인센스</span>
+                                </div>
+                            </div>
+                            <button onclick="openBooking('room-4')" class="bg-ink text-white px-8 py-3.5 text-xs font-bold tracking-widest uppercase hover:bg-gold transition-colors rounded-sm w-full">Book This Space &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SPECIAL VIEW ================= -->
+        <section id="view-special" class="page-view hidden bg-white text-ink pt-32 pb-24">
+            <div class="max-w-5xl mx-auto px-6">
+                <div class="text-center space-y-6 mb-24">
+                    <span class="text-[10px] tracking-[0.6em] text-gold uppercase font-bold">Signature Programs</span>
+                    <h2 class="text-3xl md:text-4xl font-display font-light uppercase tracking-widest">Special Services</h2>
+                    <div class="w-12 h-px bg-gold mx-auto mt-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-28">
+                    <!-- Prog 1 -->
+                    <div class="space-y-4">
+                        <span class="text-gold font-bold text-xs uppercase tracking-widest block">01 / Program</span>
+                        <div class="aspect-[4/3] overflow-hidden rounded-md shadow-md">
+                            <img src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=600&q=80" alt="Morning Infinity Pool" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-base font-serif-custom font-semibold">Morning Infinity Pool</h3>
+                        <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">동해 해돋이를 정면으로 감상하며 즐기는 새벽 전용 인피니티 풀 온수 테라피 세트.</p>
+                    </div>
+                    <!-- Prog 2 -->
+                    <div class="space-y-4">
+                        <span class="text-gold font-bold text-xs uppercase tracking-widest block">02 / Program</span>
+                        <div class="aspect-[4/3] overflow-hidden rounded-md shadow-md">
+                            <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=600&q=80" alt="Private Dining" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-base font-serif-custom font-semibold">Private Dining</h3>
+                        <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">오직 투숙객만을 위해 신선하게 빚어낸 지역 농산물 시그니처 웰빙 브런치 바스켓.</p>
+                    </div>
+                    <!-- Prog 3 -->
+                    <div class="space-y-4">
+                        <span class="text-gold font-bold text-xs uppercase tracking-widest block">03 / Program</span>
+                        <div class="aspect-[4/3] overflow-hidden rounded-md shadow-md">
+                            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80" alt="Silent Tea Therapy" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-base font-serif-custom font-semibold">Silent Tea Therapy</h3>
+                        <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">심도 있는 사색과 비움을 채워주는 객실 비치 명품 수제 허브 브렌딩 다도 클래스.</p>
+                    </div>
+                    <!-- Prog 4 -->
+                    <div class="space-y-4">
+                        <span class="text-gold font-bold text-xs uppercase tracking-widest block">04 / Program</span>
+                        <div class="aspect-[4/3] overflow-hidden rounded-md shadow-md">
+                            <img src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=600&q=80" alt="Sunset Firepit Ritual" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-base font-serif-custom font-semibold">Sunset Firepit Ritual</h3>
+                        <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">소나무 정원에 마련된 개별 불멍 화로대에서 파도 소리와 밤하늘 불티를 감상하는 의식.</p>
+                    </div>
+                </div>
+
+                <!-- Common Facilities -->
+                <div class="border-t border-gray-100 pt-20">
+                    <div class="text-center mb-16">
+                        <span class="text-[10px] tracking-[0.4em] text-gold uppercase font-bold">Shared Spaces</span>
+                        <h3 class="text-2xl font-serif-custom font-light mt-2">Common Spaces</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="space-y-4">
+                            <div class="aspect-video overflow-hidden rounded-sm shadow-md">
+                                <img src="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-sm font-serif-custom font-semibold text-gold uppercase tracking-wider">Garden Deck (정원 테라스)</h4>
+                            <p class="text-xs text-ink/75 font-serif-custom">아침 이슬 머금은 소나무 잎새 사이로 한적한 해변 바람을 마주하며 명상하는 아웃도어 공간.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="aspect-video overflow-hidden rounded-sm shadow-md">
+                                <img src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-sm font-serif-custom font-semibold text-gold uppercase tracking-wider">Firepit Lounge (모닥불 데크)</h4>
+                            <p class="text-xs text-ink/75 font-serif-custom">저녁 7시 노을이 지는 시점부터 활성화되며 감성 자갈돌 틈새의 원목 불멍 온기를 체험합니다.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="aspect-video overflow-hidden rounded-sm shadow-md">
+                                <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-sm font-serif-custom font-semibold text-gold uppercase tracking-wider">Rooftop Sky (루프탑 천창 구역)</h4>
+                            <p class="text-xs text-ink/75 font-serif-custom">천체 망원경이 구비되어 헌화로 등대의 붉은 빛줄기와 어우러지는 수많은 별자리를 감상합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Season Highlights block -->
+                <div class="border-t border-gray-100 mt-28 pt-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <span class="text-[10px] tracking-[0.4em] text-gold uppercase font-bold">Seasonal Program</span>
+                        <h3 class="text-3xl font-serif-custom font-light text-ink leading-tight">계절마다 다른<br>바다의 표정을 담다</h3>
+                        <p class="text-xs md:text-sm text-ink/70 leading-relaxed font-serif-custom">
+                            봄의 향기부터 겨울의 고즈넉한 온기까지, 윤슬만이 기획한 품격 높은 사계절 테마 프로그램을 모두 경험해보세요. 매 방문마다 새로운 영혼의 온수를 약속합니다.
+                        </p>
+                        <button onclick="openSeasonDetail()" class="border border-ink/20 px-8 py-3 text-xs font-bold uppercase hover:bg-ink hover:text-white transition-all rounded-sm">View Highlights &rarr;</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="aspect-square shadow-lg transform translate-y-6 overflow-hidden rounded-md">
+                            <img src="https://images.unsplash.com/photo-1506477331477-33d6d8b3dc85?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        </div>
+                        <div class="aspect-square shadow-lg overflow-hidden rounded-md">
+                            <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= EXPERIENCE VIEW (WELLNESS RITUAL) ================= -->
+        <section id="view-experience" class="page-view hidden bg-[#FAF9F6] text-ink pt-32 pb-24">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="text-center space-y-6 mb-16">
+                    <span class="text-[10px] tracking-[0.6em] text-gold uppercase font-bold">Analogue Ritual</span>
+                    <h2 class="text-3xl md:text-4xl font-display font-light uppercase tracking-widest">Wellness Experience</h2>
+                    <div class="w-12 h-px bg-gold mx-auto mt-4"></div>
+                </div>
+
+                <div class="bg-white shadow-2xl rounded-lg overflow-hidden flex flex-col lg:flex-row min-h-[750px] border border-gray-100">
+                    <!-- Left Ritual Sidebar -->
+                    <div class="w-full lg:w-80 bg-[#FAF9F6] border-r border-gray-100 p-8 flex flex-col justify-between">
+                        <div class="space-y-12">
+                            <div class="space-y-3">
+                                <span class="text-[11px] uppercase tracking-[0.4em] text-gold font-bold block">Ritual Menu</span>
+                                <h4 class="text-2xl font-serif-custom font-light">고요한 사색의 시간</h4>
+                            </div>
+                            <div class="flex flex-col space-y-6">
+                                <button onclick="toggleExpTab('tea')" id="exp-tab-tea" class="text-left py-2 border-b-2 border-gold text-ink font-semibold tracking-wider text-sm font-serif-custom">01 TEA THERAPY</button>
+                                <button onclick="toggleExpTab('lp')" id="exp-tab-lp" class="text-left py-2 border-b-2 border-transparent text-ink/40 tracking-wider text-sm font-serif-custom">02 LP TURNTABLE</button>
+                                <button onclick="toggleExpTab('diary')" id="exp-tab-diary" class="text-left py-2 border-b-2 border-transparent text-ink/40 tracking-wider text-sm font-serif-custom">03 SEASIDE DIARY</button>
+                                <button onclick="toggleExpTab('ai')" id="exp-tab-ai" class="text-left py-2 border-b-2 border-transparent text-ink/40 tracking-wider text-sm font-serif-custom">04 AI CONCIERGE</button>
+                            </div>
+                        </div>
+                        <div class="pt-8 border-t border-gray-200 hidden lg:block text-xs font-serif-custom text-ink/50 leading-relaxed">
+                            * 모든 웰니스 프로그램은 객실에 정갈하게 정돈되어 있으며 투숙객 누구나 완전 무상으로 자율 사색 이용이 보장됩니다.
+                        </div>
+                    </div>
+
+                    <!-- Right Interactive Panel -->
+                    <div class="flex-1 p-8 md:p-16 bg-white overflow-hidden">
+                        <!-- Tab 1: TEA THERAPY -->
+                        <div id="ritual-pane-tea" class="space-y-8">
+                            <div class="space-y-3">
+                                <span class="text-[10px] tracking-widest text-gold uppercase font-bold">Ritual 01 / 다도 의식</span>
+                                <h3 class="text-2xl font-serif-custom text-ink font-light">다도 티 테라피 (Tea Ritual)</h3>
+                                <p class="text-xs md:text-sm text-ink/65 font-serif-custom">창너머 동해의 해돋이를 바라보며 따뜻한 온수를 우려내는 고요한 다도 시간입니다.</p>
+                            </div>
+                            <!-- Teas select buttons -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <button onclick="selectTea('peach')" id="tea-opt-peach" class="p-4 border-2 border-gold bg-gold/5 text-left flex flex-col justify-between h-36 rounded-sm">
+                                    <span class="text-[9px] font-bold text-gold uppercase">Sunrise Tea</span>
+                                    <p class="text-base font-serif-custom text-ink font-semibold mt-auto">빛결 피치 로즈힙</p>
+                                </button>
+                                <button onclick="selectTea('bamboo')" id="tea-opt-bamboo" class="p-4 border border-gray-200 text-left flex flex-col justify-between h-36 rounded-sm">
+                                    <span class="text-[9px] font-bold text-gray-400 uppercase">Garden Quiet</span>
+                                    <p class="text-base font-serif-custom text-ink font-semibold mt-auto">청죽 댓잎 고요차</p>
+                                </button>
+                                <button onclick="selectTea('chrysant')" id="tea-opt-chrysant" class="p-4 border border-gray-200 text-left flex flex-col justify-between h-36 rounded-sm">
+                                    <span class="text-[9px] font-bold text-gray-400 uppercase">Autumn Golden</span>
+                                    <p class="text-base font-serif-custom text-ink font-semibold mt-auto">맑은 국화 가을차</p>
+                                </button>
+                            </div>
+                            <div class="bg-softGray p-6 rounded-md border border-gray-200 space-y-4">
+                                <h4 id="tea-disp-name" class="text-lg font-serif-custom text-ink font-semibold">빛결 피치 로즈힙 (Lotus Peach)</h4>
+                                <p id="tea-disp-desc" class="text-xs text-ink/75 font-serif-custom leading-relaxed">국산 말린 백합잎과 복사꽃, 새콤한 로즈힙 열매를 정성스럽게 브렌딩하여 머리를 깨끗하게 맑히고 피로를 조용히 걷어내는 아침 차.</p>
+                                <p id="tea-disp-recommend" class="text-xs text-gold bg-white px-4 py-3 border-l-2 border-gold font-serif-custom font-medium leading-relaxed">사색 권장 : 아침 7시 헌화로 수평선 너머로 해돋이가 떠오르는 찰나에 정면 유리창 앞에서 감상</p>
+                                <div class="pt-4 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-gray-100">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center bg-white relative overflow-hidden" id="timer-visual-box">
+                                            <i data-lucide="coffee" class="w-5 h-5 text-ink"></i>
+                                        </div>
+                                        <span class="text-xs text-ink/70 font-serif-custom">차 우리기 완료 권장 시간: <strong id="tea-disp-time">3분 00초</strong></span>
+                                    </div>
+                                    <button onclick="startTeaTimer()" id="tea-timer-btn" class="bg-ink text-white px-6 py-3 text-xs tracking-wider uppercase font-bold hover:bg-gold transition-colors rounded-sm">차 우리기 시작</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: LP TURNTABLE -->
+                        <div id="ritual-pane-lp" class="space-y-8 hidden">
+                            <div class="space-y-3">
+                                <span class="text-[10px] tracking-widest text-gold uppercase font-bold">Ritual 02 / 아날로그 선율</span>
+                                <h3 class="text-2xl font-serif-custom text-ink font-light">LP 아날로그 턴테이블 (Analogue LP Scene)</h3>
+                                <p class="text-xs md:text-sm text-ink/65 font-serif-custom">정성껏 고른 LP판의 지직거리는 미세 침음과 파도 조용한 비트 소리를 객실에서 체험해 보세요.</p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div onclick="playLp('dawn')" class="p-6 border border-gray-200 cursor-pointer hover:shadow-md rounded-md flex flex-col items-center text-center space-y-4">
+                                    <div class="w-24 h-24 rounded-sm bg-gradient-to-br from-blue-900 to-indigo-950 flex flex-col justify-between p-3 relative shadow-lg">
+                                        <div class="w-full border border-white/5 h-full absolute inset-0 rounded-sm"></div>
+                                        <span class="text-[7px] text-white/40 tracking-wider">01</span>
+                                        <p class="text-[11px] text-white/90 font-serif-custom mt-auto text-left leading-none">Heonhwa Beach Dawn</p>
+                                    </div>
+                                    <h4 class="font-serif-custom font-semibold text-sm">해돋이의 푸른 여백</h4>
+                                </div>
+                                <div onclick="playLp('sunset')" class="p-6 border border-gray-200 cursor-pointer hover:shadow-md rounded-md flex flex-col items-center text-center space-y-4">
+                                    <div class="w-24 h-24 rounded-sm bg-gradient-to-br from-amber-800 to-amber-950 flex flex-col justify-between p-3 relative shadow-lg">
+                                        <div class="w-full border border-white/5 h-full absolute inset-0 rounded-sm"></div>
+                                        <span class="text-[7px] text-white/40 tracking-wider">02</span>
+                                        <p class="text-[11px] text-white/90 font-serif-custom mt-auto text-left leading-none">Acoustic Sea Breeze</p>
+                                    </div>
+                                    <h4 class="font-serif-custom font-semibold text-sm">노을빛과 통기타</h4>
+                                </div>
+                                <div onclick="playLp('midnight')" class="p-6 border border-gray-200 cursor-pointer hover:shadow-md rounded-md flex flex-col items-center text-center space-y-4">
+                                    <div class="w-24 h-24 rounded-sm bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between p-3 relative shadow-lg">
+                                        <div class="w-full border border-white/5 h-full absolute inset-0 rounded-sm"></div>
+                                        <span class="text-[7px] text-white/40 tracking-wider">03</span>
+                                        <p class="text-[11px] text-white/90 font-serif-custom mt-auto text-left leading-none">Quiet Wave Meditation</p>
+                                    </div>
+                                    <h4 class="font-serif-custom font-semibold text-sm">깊은 밤의 파도소리</h4>
+                                </div>
+                            </div>
+                            <!-- LP spinning container -->
+                            <div id="lp-spin-box" class="hidden border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between gap-8 max-w-md mx-auto">
+                                <div class="relative w-44 h-44 flex items-center justify-center">
+                                    <div id="lp-vinyl-visual" class="w-40 h-40 rounded-full bg-neutral-950 border-4 border-neutral-800 shadow-2xl lp-vinyl-spin flex items-center justify-center">
+                                        <div class="w-12 h-12 bg-white rounded-full border border-gold/30 flex items-center justify-center p-1">
+                                            <span class="text-[6px] text-neutral-900 font-bold tracking-widest font-serif-custom">YUNSEUL</span>
+                                        </div>
+                                    </div>
+                                    <div class="absolute w-2 h-2 rounded-full bg-white border border-gray-300"></div>
+                                </div>
+                                <div class="flex-1 space-y-2 text-center md:text-left">
+                                    <span class="text-[8px] text-gold uppercase font-bold tracking-widest animate-pulse flex items-center justify-center md:justify-start gap-1">● Playing Analogue vinyl</span>
+                                    <h4 id="lp-spin-title" class="font-serif-custom text-xl font-semibold">Heonhwa Beach Dawn</h4>
+                                    <p class="text-xs text-ink/50 font-serif-custom leading-relaxed">어쿠스틱 기타와 헌화로의 한적한 파도 사운드가 앰비언트 기법으로 부드럽게 재생 중입니다.</p>
+                                    <button onclick="stopLp()" class="text-xs text-red-500 font-bold uppercase tracking-wider hover:underline pt-2">음반 재생 종료</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3: SEASIDE DIARY -->
+                        <div id="ritual-pane-diary" class="space-y-8 hidden">
+                            <div class="space-y-3">
+                                <span class="text-[10px] tracking-widest text-gold uppercase font-bold">Ritual 03 / 방명록</span>
+                                <h3 class="text-2xl font-serif-custom text-ink font-light">윤슬 디지털 방명록 (Seaside Guestbook)</h3>
+                                <p class="text-xs md:text-sm text-ink/65 font-serif-custom">윤슬에서의 평화로운 쉼을 한 자 흔적으로 남겨보세요. 종이 카드 엽서가 당신의 소중한 고백을 품습니다.</p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <form onsubmit="submitGuestNote(event)" class="space-y-4 bg-softGray p-6 rounded-md border border-gray-200">
+                                    <h4 class="font-serif-custom text-base font-semibold">흔적 남기기</h4>
+                                    <div>
+                                        <label class="text-[9px] uppercase font-bold tracking-wider text-ink/50">성명 또는 닉네임</label>
+                                        <input type="text" id="guest-author" placeholder="닉네임" class="w-full bg-white p-3 border border-gray-200 text-xs focus:ring-1 focus:ring-gold/20 outline-none" required>
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase font-bold tracking-wider text-ink/50">엽서 색상 선택</label>
+                                        <div class="flex space-x-3 mt-1">
+                                            <button type="button" onclick="setNoteBg('bg-[#F2EFE9]')" class="w-6 h-6 rounded-full bg-[#F2EFE9] border border-gray-300 ring-2 ring-gold" id="col-bg-1"></button>
+                                            <button type="button" onclick="setNoteBg('bg-[#EBF0ED]')" class="w-6 h-6 rounded-full bg-[#EBF0ED] border border-gray-300" id="col-bg-2"></button>
+                                            <button type="button" onclick="setNoteBg('bg-[#EAF3F5]')" class="w-6 h-6 rounded-full bg-[#EAF3F5] border border-gray-300" id="col-bg-3"></button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase font-bold tracking-wider text-ink/50">사색 문장 기록</label>
+                                        <textarea id="guest-text" placeholder="파도 소리에 마음이 편안해집니다..." class="w-full bg-white h-24 p-3 border border-gray-200 text-xs focus:ring-1 focus:ring-gold/20 outline-none resize-none leading-relaxed" required></textarea>
+                                    </div>
+                                    <button type="submit" class="w-full bg-ink text-white py-3 text-xs tracking-widest uppercase font-bold hover:bg-gold transition-all">POST MEMORY</button>
+                                </form>
+                                <div class="space-y-4 max-h-[350px] overflow-y-auto custom-scroller pr-2" id="guestnotes-container">
+                                    <!-- Loaded by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 4: AI CONCIERGE -->
+                        <div id="ritual-pane-ai" class="space-y-8 hidden">
+                            <div class="space-y-3">
+                                <span class="text-[10px] tracking-widest text-gold uppercase font-bold">Ritual 04 / AI Butler</span>
+                                <h3 class="text-2xl font-serif-custom text-ink font-light">강릉 헌화로 AI 버틀러 컨시어지</h3>
+                                <p class="text-xs md:text-sm text-ink/65 font-serif-custom">강릉의 맛집, 추천 산책 코스, 기암괴석 절벽 스팟에 대하여 실시간으로 AI에게 물어보세요.</p>
+                            </div>
+                            <div class="bg-softGray p-6 border border-gray-200 space-y-4">
+                                <div class="h-52 overflow-y-auto bg-white border border-gray-200 p-4 text-xs font-serif-custom space-y-4 custom-scroller" id="ai-chat-scroller">
+                                    <div>
+                                        <span class="text-gold font-bold uppercase tracking-widest block text-[8px]">Butler AI</span>
+                                        <p class="bg-gray-50 border border-gray-100 p-3 rounded-r-lg max-w-[85%] mt-1 font-light leading-relaxed">안녕하세요! 강릉 옥계면 헌화로 바다 앞 윤슬의 AI 버틀러입니다. 강릉 최고의 오션뷰 코스나 현지인 추천 카페를 원하시면 언제든 질문하세요.</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <input type="text" id="chat-msg-input" placeholder="헌화로 해변 드라이브 코스 추천해줘..." class="flex-1 p-3 border border-gray-200 text-xs focus:ring-1 focus:ring-gold/20 outline-none rounded-sm" onkeypress="if(event.key==='Enter') sendChat()">
+                                    <button onclick="sendChat()" class="bg-ink hover:bg-gold text-white px-5 py-3 text-xs uppercase font-bold transition-all rounded-sm">SEND</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= LOCATION VIEW ================= -->
+        <section id="view-location" class="page-view hidden bg-white text-ink pt-32 pb-24">
+            <div class="max-w-5xl mx-auto px-6 space-y-20">
+                <div class="text-center space-y-6">
+                    <span class="text-[10px] tracking-[0.6em] text-gold uppercase font-bold">Directions</span>
+                    <h2 class="text-3xl md:text-4xl font-display font-light uppercase tracking-widest">Location</h2>
+                    <div class="w-12 h-px bg-gold mx-auto mt-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                    <div class="lg:col-span-8 shadow-2xl overflow-hidden rounded-sm border border-gray-200">
+                        <!-- Map container -->
+                        <div id="leaflet-map"></div>
+                    </div>
+                    <div class="lg:col-span-4 space-y-12">
+                        <div class="space-y-4">
+                            <span class="text-[10px] tracking-[0.4em] text-gold uppercase font-bold">ADDRESS</span>
+                            <p class="text-xl font-serif-custom text-ink leading-relaxed font-light">강원특별자치도 강릉시<br>옥계면 헌화로 456</p>
+                            <p class="text-[9px] text-ink/45 font-mono uppercase tracking-widest">Heonhwa-ro, Gangneung-si, Korea</p>
+                        </div>
+                        <div class="w-8 h-px bg-gold/50"></div>
+                        <div class="space-y-6">
+                            <div>
+                                <h5 class="text-[10px] tracking-[0.3em] uppercase text-gold font-bold mb-2">BY CAR (차량 진입)</h5>
+                                <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">동해고속도로 옥계 IC 진출 후 약 7분 주행. 금진항 방면 아름다운 기암괴석 헌화로 해안도로 바다 정면에 전용 단독 주차 공간 완비.</p>
+                            </div>
+                            <div>
+                                <h5 class="text-[10px] tracking-[0.3em] uppercase text-gold font-bold mb-2">PUBLIC (대중교통)</h5>
+                                <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">강릉역(KTX) 하차 후 택시 이용 시 약 25분 소요, 혹은 112번 일반 시내버스 이용 시 금진항 하차 도보 3분.</p>
+                            </div>
+                        </div>
+                        <div class="pt-4 grid grid-cols-2 gap-4">
+                            <a href="https://map.naver.com/" target="_blank" class="bg-[#2DB400] text-white py-3.5 text-center text-xs font-bold rounded-sm hover:opacity-90 transition-opacity">Naver Map</a>
+                            <a href="https://map.kakao.com/" target="_blank" class="bg-[#FFEB00] text-[#3C1E1E] py-3.5 text-center text-xs font-bold rounded-sm hover:opacity-90 transition-opacity">Kakao Map</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attractions -->
+                <div class="pt-16 border-t border-gray-100">
+                    <div class="text-center mb-12">
+                        <span class="text-[10px] tracking-widest text-gold uppercase font-bold">Recommended Tour Courses</span>
+                        <h4 class="text-lg font-serif-custom mt-2 font-light">Nearby Attractions (주변 명소스팟)</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="space-y-4">
+                            <div class="aspect-video overflow-hidden rounded-sm shadow-md">
+                                <img src="https://images.unsplash.com/photo-150752428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-sm font-serif-custom font-semibold">금진 해변 &amp; 헌화로 산책길</h4>
+                            <p class="text-xs text-ink/75 leading-relaxed font-serif-custom">바닷길 절벽 기암괴석을 휘감는 최고 조망 드라이브로 아침 새벽 가벼운 조깅에 우수합니다.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="aspect-video overflow-hidden rounded-sm shadow-md">
+                                <img src="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-sm font-serif-custom font-semibold">정동진 모래시계 공원</h4>
+                            <p class="text-xs text-ink/75 leading-relaxed font-serif-custom">기차 박물관과 더불어 세계 최대 수직 모래시계가 위치하여 낙조를 맞이하는 감성 공간.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="aspect-video overflow-hidden rounded-sm shadow-md">
+                                <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-sm font-serif-custom font-semibold">헌화 등대 카페거리</h4>
+                            <p class="text-xs text-ink/75 leading-relaxed font-serif-custom">현지인들이 극찬하는 신선한 수제 에이드와 수려한 드립커피 향이 어우러지는 사색 카페 존.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 3. FOOTER -->
+    <footer class="bg-ink text-white/50 py-24 px-6 md:px-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 text-xs md:text-[13px]">
+            <div class="space-y-6">
+                <span class="text-2xl font-serif-custom text-white tracking-[0.15em] font-light">YUNSEUL</span>
+                <p class="leading-relaxed text-xs">
+                    바다의 반짝임과 파도 소리가 머무는 고요한 독채 빌라.<br>우리는 당신의 느린 계절을 따뜻하고 온전하게 지킵니다.
+                </p>
+            </div>
+            <div class="space-y-4 font-serif-custom">
+                <span class="text-xs uppercase tracking-wider text-white font-bold block">Contact Info</span>
+                <div class="space-y-2 text-xs leading-relaxed">
+                    <p>Tel: 1544-0634</p>
+                    <p>Email: booking@yunseulstay.co.kr</p>
+                    <p>Address: 강원특별자치도 강릉시 옥계면 헌화로 456</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <span class="text-xs uppercase tracking-wider text-white font-bold block">Quick Links</span>
+                <ul class="space-y-2 text-xs font-serif-custom">
+                    <li><button onclick="changePage('story')" class="hover:text-white transition-colors">Philosophy</button></li>
+                    <li><button onclick="changePage('rooms')" class="hover:text-white transition-colors">Rooms View</button></li>
+                    <li><button onclick="changePage('special')" class="hover:text-white transition-colors">Special Moments</button></li>
+                    <li><button onclick="changePage('location')" class="hover:text-white transition-colors">Directions Guide</button></li>
+                </ul>
+            </div>
+            <div class="space-y-4 font-serif-custom">
+                <span class="text-xs uppercase tracking-wider text-white font-bold block">Business Info</span>
+                <div class="space-y-1 text-xs opacity-80 leading-relaxed">
+                    <p>상호: 윤슬 | 대표: 오정민</p>
+                    <p>사업자번호: 130-37-46318</p>
+                    <p>통신판매업: 제 2010-경기부천-924호</p>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-white/30 tracking-widest gap-4 font-serif-custom">
+            <p>© 2026 YUNSEUL Stay. All rights reserved.</p>
+            <div class="flex space-x-6 text-[11px]">
+                <a href="#" class="hover:text-white">Privacy Statement</a>
+                <a href="#" class="hover:text-white">Terms of Use</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- To Top Button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 z-[80] w-12 h-12 bg-white text-ink border border-gray-100 rounded-full flex flex-col items-center justify-center hover:bg-gold hover:text-white transition-all shadow-xl group" id="totop-btn">
+        <i data-lucide="arrow-up" class="w-4 h-4 group-hover:-translate-y-0.5 transition-transform"></i>
+        <span class="text-[7.5px] font-bold tracking-widest mt-0.5">TOP</span>
+    </button>
+
+    <!-- ================= RESERVATION BOOKING MODAL ================= -->
+    <div id="booking-modal" class="fixed inset-0 bg-ink/75 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+        <div class="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 md:p-10 relative space-y-8 custom-scroller rounded-sm">
+            <button onclick="closeBooking()" class="absolute top-6 right-6 text-black hover:text-gold transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="space-y-2 border-b border-gray-100 pb-4">
+                <span class="text-[9px] tracking-[0.4em] text-gold uppercase font-bold">Booking System</span>
+                <h3 class="text-2xl font-serif-custom font-light text-ink">실시간 객실 예약 신청</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Select Room -->
+                <div class="space-y-2">
+                    <label class="text-[10px] text-ink/50 tracking-wider uppercase font-bold">Select Room (객실 선택)</label>
+                    <select id="book-room-select" onchange="updateBookingMath()" class="w-full bg-gray-50 p-4 border border-gray-100 outline-none text-xs focus:ring-1 focus:ring-gold/30 font-serif-custom">
+                        <option value="room-1">1F GARDEN LOUNGE - ₩450,000 / 1박</option>
+                        <option value="room-2">2F OCEAN BEDROOM - ₩380,000 / 1박</option>
+                        <option value="room-3">SUNRISE HEATED POOL - ₩550,000 / 1박</option>
+                        <option value="room-4">SILENT ATTIC STUDY - ₩320,000 / 1박</option>
+                    </select>
+                </div>
+                <!-- Occupancy -->
+                <div class="space-y-2">
+                    <label class="text-[10px] text-ink/50 tracking-wider uppercase font-bold">Occupancy (인원수)</label>
+                    <select id="book-guests" class="w-full bg-gray-50 p-4 border border-gray-100 outline-none text-xs focus:ring-1 focus:ring-gold/30 font-serif-custom">
+                        <option value="2">성인 2인 (기준인원)</option>
+                        <option value="3">성인 3인 (추가 금액 ₩30,000)</option>
+                        <option value="4">성인 4인 (추가 금액 ₩60,000)</option>
+                    </select>
+                </div>
+                <!-- Checkin -->
+                <div class="space-y-2">
+                    <label class="text-[10px] text-ink/50 tracking-wider uppercase font-bold">Check-in Date</label>
+                    <input type="date" id="book-checkin" onchange="updateBookingMath()" class="w-full bg-gray-50 p-4 border border-gray-100 outline-none text-xs font-mono">
+                </div>
+                <!-- Checkout -->
+                <div class="space-y-2">
+                    <label class="text-[10px] text-ink/50 tracking-wider uppercase font-bold">Check-out Date</label>
+                    <input type="date" id="book-checkout" onchange="updateBookingMath()" class="w-full bg-gray-50 p-4 border border-gray-100 outline-none text-xs font-mono">
+                </div>
+            </div>
+            <!-- Customer info -->
+            <div class="space-y-4 border-t border-gray-100 pt-6">
+                <span class="text-[10px] text-ink/50 tracking-wider uppercase font-bold">User Information</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="text" id="book-name" placeholder="예약자 성함" class="w-full p-4 bg-gray-50 border border-gray-100 outline-none text-xs font-serif-custom">
+                    <input type="tel" id="book-phone" placeholder="연락처 (010-1234-5678)" class="w-full p-4 bg-gray-50 border border-gray-100 outline-none text-xs font-mono">
+                </div>
+                <textarea id="book-memo" placeholder="특별 조율사항이나 알레르기 유무가 있으시면 간략하게 기재해주세요." class="w-full h-20 p-4 bg-gray-50 border border-gray-100 outline-none text-xs font-serif-custom resize-none"></textarea>
+            </div>
+            <!-- Pricing receipt -->
+            <div class="bg-gray-50 p-6 flex justify-between items-center text-xs rounded-sm border border-gray-200">
+                <div>
+                    <p class="text-ink/50 text-[10px] uppercase font-bold tracking-widest">Pricing Estimation</p>
+                    <p id="book-math-desc" class="font-light text-ink mt-1 font-serif-custom">객실 및 예약 희망 날짜를 기입하세요.</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-[9px] text-gold font-bold">총 합계금액</span>
+                    <p id="book-math-total" class="text-xl md:text-2xl font-serif-custom text-gold font-semibold">₩0</p>
+                </div>
+            </div>
+            <button onclick="submitBooking()" class="w-full bg-ink text-white py-5 text-sm font-bold tracking-widest uppercase hover:bg-gold transition-all duration-300 rounded-sm">예약 신청 제출하기 (SEND REQUEST)</button>
+        </div>
+    </div>
+
+    <!-- Booking success receipt overlay -->
+    <div id="receipt-modal" class="fixed inset-0 bg-ink/80 z-[110] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+        <div class="bg-white max-w-md w-full shadow-2xl p-8 relative space-y-6 text-center rounded-sm">
+            <h4 class="text-2xl font-serif-custom text-gold font-light">예약 신청 완료</h4>
+            <div class="w-12 h-px bg-gold mx-auto"></div>
+            <p class="text-xs text-ink/70 leading-relaxed font-serif-custom">예약 신청이 안전하게 접수되었습니다. 아래 영수증 번호를 확인해 주세요.</p>
+            <div id="receipt-box" class="bg-softGray p-5 text-left text-xs font-mono border border-gray-200 leading-relaxed text-ink space-y-2">
+                <!-- Loaded dynamically -->
+            </div>
+            <button onclick="closeReceipt()" class="w-full bg-ink text-white py-3 text-xs tracking-wider uppercase hover:bg-gold transition-colors font-bold rounded-sm">확인 (CONFIRM)</button>
+        </div>
+    </div>
+
+    <!-- Seasonal Highlights modal -->
+    <div id="season-modal" class="fixed inset-0 bg-ink/75 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white max-w-lg w-full shadow-2xl p-8 relative space-y-6 rounded-sm">
+            <button onclick="closeSeasonDetail()" class="absolute top-6 right-6 text-black hover:text-gold">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h4 class="text-2xl font-serif-custom text-ink font-light">계절 테마 세부 프로그램</h4>
+            <div class="w-10 h-px bg-gold"></div>
+            <div class="space-y-4 text-xs leading-relaxed text-ink/70 font-serif-custom">
+                <div class="border-l-2 border-gold/30 pl-4">
+                    <p class="font-bold text-ink">Spring (봄): Blooming Wave</p>
+                    <p>봄의 싱그러움을 만끽할 웰컴 야로즈힙 티와 수수 가든 플라워 디자인 큐레이팅 세트 제공.</p>
+                </div>
+                <div class="border-l-2 border-gold/30 pl-4">
+                    <p class="font-bold text-ink">Summer (여름): Azure Horizon</p>
+                    <p>시원한 냉온 수영장 테라피와 은은한 탄산 라임에이드 드링크 패키지 제공.</p>
+                </div>
+                <div class="border-l-2 border-gold/30 pl-4">
+                    <p class="font-bold text-ink">Autumn (가을): Sunset Tea Wood</p>
+                    <p>고급 장작 향의 우디 인센스와 몸을 따뜻하게 감싸 안는 편백 한차 조식 서비스.</p>
+                </div>
+                <div class="border-l-2 border-gold/30 pl-4">
+                    <p class="font-bold text-ink">Winter (겨울): Charcoal Healing</p>
+                    <p>방의 난방을 극대화하는 온열 실내 불멍 조명과 오선지에 잔잔히 부서지는 아날로그 사운드 세팅.</p>
+                </div>
+            </div>
+            <button onclick="closeSeasonDetail()" class="w-full bg-ink text-white py-3 text-xs font-semibold uppercase hover:bg-gold transition-colors text-center rounded-sm">CONFIRM</button>
+        </div>
+    </div>
+
+
+    <!-- ================= JAVASCRIPT APP LOGIC ================= -->
+    <script>
+        // Pages states management
+        let currentPage = 'home';
+        let activeTea = 'peach';
+        let teaTimer = null;
+        let isBrewing = false;
+        let playingLpId = null;
+        let currentNoteBg = 'bg-[#F2EFE9]';
+        let leafletMap = null;
+
+        // Healing Slider Data
+        const healingSlides = [
+            {
+                time: "08:00 AM",
+                title: "아침 티타임과 따뜻한 차 한 잔",
+                desc: "수평선 위로 오롯이 쏟아지는 아침 햇살을 듬뿍 맞으며 은은히 우려진 꽃차로 영혼을 일깨웁니다.",
+                image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&h=600&q=80"
+            },
+            {
+                time: "04:00 PM",
+                title: "바람이 쉬어가는 야외 테라스",
+                desc: "기암괴석 해안 절벽을 마주한 드넓은 테라스 선베드에 누워 잔물결 파도 소리에 조용히 귀 끝을 맑힙니다.",
+                image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1600&h=600&q=80"
+            },
+            {
+                time: "09:00 PM",
+                title: "턴테이블 아날로그 LP 감상",
+                desc: "감성적인 아날로그 턴테이블 바늘 끝에서 피어오르는 재즈 선율과 함께 일상의 완벽한 고립을 축복합니다.",
+                image: "https://images.unsplash.com/photo-1542208998-f6dbbb27a72f?auto=format&fit=crop&w=1600&h=600&q=80"
+            }
+        ];
+        let currentHealingIdx = 0;
+
+        // Tea details configuration
+        const teaData = {
+            peach: {
+                name: "빛결 피치 로즈힙 (Lotus Peach)",
+                desc: "국산 말린 백합잎과 복사꽃, 새콤한 로즈힙 열매를 정성스럽게 브렌딩하여 머리를 깨끗하게 맑히고 피로를 조용히 걷어내는 아침 차.",
+                recommend: "사색 권장 : 아침 7시 헌화로 수평선 너머로 해돋이가 떠오르는 찰나에 정면 유리창 앞에서 감상",
+                timeText: "3분 00초",
+                seconds: 180
+            },
+            bamboo: {
+                name: "청죽 댓잎 고요차 (Silent Bamboo)",
+                desc: "은은히 머리를 감싸는 야생 댓잎과 녹차 잎을 숙성하여 자연 속의 깊고 따뜻한 초록 여백의 기운을 전해줍니다.",
+                recommend: "사색 권장 : 오후 4시 정원 자쿠지에서 편백 입욕을 하면서 다도 세트와 평화롭게 음미",
+                timeText: "2분 30초",
+                seconds: 150
+            },
+            chrysant: {
+                name: "맑은 국화 가을차 (Autumn Golden)",
+                desc: "강릉 기암괴석 골짜기에서 채취한 감국화를 건조하여 황금빛 꽃송이가 수면 위로 우아하게 만개하는 극적인 사색의 꽃차.",
+                recommend: "사색 권장 : 저녁 8시 달빛의 윤슬이 오목하게 가라앉을 무렵 은은한 조명 아래서 한 모금",
+                timeText: "3분 30초",
+                seconds: 210
+            }
+        };
+
+        // Guestbook initial notes
+        let guestNotes = [
+            { author: "민우", text: "오롯이 동해의 파도 소리만을 들으며 보낸 하룻밤은 지쳤던 제 매일에 큰 위로가 되었습니다.", date: "2026.06.12", bg: "bg-[#F2EFE9]" },
+            { author: "서연", text: "방을 가득 채우는 편백나무 향과 고개를 돌리면 펼쳐지는 은빛 윤슬 파도의 잔상이 영원할 것 같습니다.", date: "2026.05.28", bg: "bg-[#EBF0ED]" }
+        ];
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initLeafletMap();
+            renderGuestNotes();
+            startHealingAutoPlay();
+
+            // Setup Navigation Scroll styling trigger
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                const logo = document.getElementById('nav-logo');
+                const links = document.getElementById('nav-links').querySelectorAll('button');
+                const mTrigger = document.getElementById('menu-trigger');
+
+                if (window.scrollY > 50 || currentPage !== 'home') {
+                    nav.className = "fixed top-0 w-full z-50 transition-all duration-700 py-4 glass-header text-ink";
+                    logo.classList.remove('text-white');
+                    logo.classList.add('text-ink');
+                    mTrigger.className = "md:hidden text-ink";
+                    links.forEach(btn => {
+                        btn.classList.remove('text-white');
+                        btn.classList.add('text-ink/80');
+                    });
+                } else {
+                    nav.className = "fixed top-0 w-full z-50 transition-all duration-700 py-8 text-white bg-transparent";
+                    logo.classList.remove('text-ink');
+                    logo.classList.add('text-white');
+                    mTrigger.className = "md:hidden text-white";
+                    links.forEach(btn => {
+                        btn.classList.remove('text-ink/80');
+                        btn.classList.add('text-white');
+                    });
+                }
+            });
+        });
+
+        function startHealingAutoPlay() {
+            setInterval(() => {
+                currentHealingIdx = (currentHealingIdx + 1) % healingSlides.length;
+                setHealingSlide(currentHealingIdx);
+            }, 8000);
+        }
+
+        function setHealingSlide(idx) {
+            currentHealingIdx = idx;
+            const slide = healingSlides[idx];
+            document.getElementById('healing-slide-img').src = slide.image;
+            document.getElementById('healing-slide-time').innerText = slide.time;
+            document.getElementById('healing-slide-title').innerText = slide.title;
+            document.getElementById('healing-slide-desc').innerText = slide.desc;
+
+            for (let i = 0; i < 3; i++) {
+                const dot = document.getElementById(`healing-dot-${i}`);
+                if (i === idx) {
+                    dot.className = "w-3 h-3 rounded-full bg-gold cursor-pointer transition-colors duration-300";
+                } else {
+                    dot.className = "w-3 h-3 rounded-full bg-gray-200 cursor-pointer transition-colors duration-300";
+                }
+            }
+        }
+
+        // Change App page view
+        function changePage(pageId) {
+            currentPage = pageId;
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.add('hidden');
+            });
+            document.getElementById(`view-${pageId}`).classList.remove('hidden');
+
+            // Force scroll top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Trigger scroll handler to refresh navbar design immediately
+            window.dispatchEvent(new Event('scroll'));
+
+            // Handle map resize trigger if location tab active
+            if (pageId === 'location' && leafletMap) {
+                setTimeout(() => {
+                    leafletMap.invalidateSize();
+                }, 300);
+            }
+        }
+
+        function goToRoom(roomId) {
+            changePage('rooms');
+            setTimeout(() => {
+                const el = document.getElementById(roomId);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+
+        function toggleMobileMenu(show) {
+            const el = document.getElementById('mobile-overlay');
+            if (show) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Map setup
+        function initLeafletMap() {
+            try {
+                // Centered at Gangneung Heonhwa-ro Sea side (37.618, 129.043)
+                leafletMap = L.map('leaflet-map').setView([37.618, 129.043], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(leafletMap);
+
+                L.marker([37.618, 129.043]).addTo(leafletMap)
+                    .bindPopup('<b class="font-serif-custom text-sm">YUNSEUL STAY</b><br><span class="text-xs">강릉시 옥계면 헌화로 456</span>')
+                    .openPopup();
+            } catch (err) {
+                console.error("Map initialization failed", err);
+            }
+        }
+
+        // Booking interactions
+        function openBooking(roomId = 'room-1') {
+            document.getElementById('book-room-select').value = roomId;
+            document.getElementById('booking-modal').classList.remove('hidden');
+            updateBookingMath();
+        }
+
+        function closeBooking() {
+            document.getElementById('booking-modal').classList.add('hidden');
+        }
+
+        function updateBookingMath() {
+            const roomEl = document.getElementById('book-room-select');
+            const roomVal = roomEl.value;
+            const checkinVal = document.getElementById('book-checkin').value;
+            const checkoutVal = document.getElementById('book-checkout').value;
+            const guestsVal = parseInt(document.getElementById('book-guests').value);
+
+            let pricePerNight = 450000;
+            if (roomVal === 'room-2') pricePerNight = 380000;
+            else if (roomVal === 'room-3') pricePerNight = 550000;
+            else if (roomVal === 'room-4') pricePerNight = 320000;
+
+            let extraGuestFee = 0;
+            if (guestsVal === 3) extraGuestFee = 30000;
+            else if (guestsVal === 4) extraGuestFee = 60000;
+
+            if (!checkinVal || !checkoutVal) {
+                document.getElementById('book-math-desc').innerText = "체크인 및 체크아웃 일정을 먼저 지정하세요.";
+                document.getElementById('book-math-total').innerText = "₩0";
+                return;
+            }
+
+            const inDate = new Date(checkinVal);
+            const outDate = new Date(checkoutVal);
+            const timeDiff = outDate.getTime() - inDate.getTime();
+            const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            if (nights <= 0) {
+                document.getElementById('book-math-desc').innerText = "체크아웃 날짜는 체크인 날짜 이후여야 합니다.";
+                document.getElementById('book-math-total').innerText = "₩0";
+                return;
+            }
+
+            const total = (pricePerNight + extraGuestFee) * nights;
+            document.getElementById('book-math-desc').innerText = `${roomEl.options[roomEl.selectedIndex].text.split(' - ')[0]} (${guestsVal}인) x ${nights}박`;
+            document.getElementById('book-math-total').innerText = `₩${total.toLocaleString()}`;
+        }
+
+        function submitBooking() {
+            const name = document.getElementById('book-name').value.trim();
+            const phone = document.getElementById('book-phone').value.trim();
+            const roomEl = document.getElementById('book-room-select');
+            const guests = document.getElementById('book-guests').value;
+            const checkin = document.getElementById('book-checkin').value;
+            const checkout = document.getElementById('book-checkout').value;
+            const memo = document.getElementById('book-memo').value;
+
+            if (!name || !phone || !checkin || !checkout) {
+                alert("예약자 성함, 연락처, 투숙 일정을 모두 정확하게 입력하세요.");
+                return;
+            }
+
+            const receiptNo = "YS-" + Date.now().toString().slice(-6);
+            const totalText = document.getElementById('book-math-total').innerText;
+
+            const receiptHtml = `
+                <div><strong>예약 영수번호:</strong> ${receiptNo}</div>
+                <div><strong>예약자명:</strong> ${name}</div>
+                <div><strong>연락처:</strong> ${phone}</div>
+                <div><strong>객실:</strong> ${roomEl.options[roomEl.selectedIndex].text.split(' - ')[0]}</div>
+                <div><strong>투숙일정:</strong> ${checkin} ~ ${checkout} (${guests}인)</div>
+                <div class="border-t border-gray-300 pt-2 mt-2 font-bold text-gold"><strong>결제합계:</strong> ${totalText}</div>
+            `;
+
+            document.getElementById('receipt-box').innerHTML = receiptHtml;
+            closeBooking();
+            document.getElementById('receipt-modal').classList.remove('hidden');
+        }
+
+        function closeReceipt() {
+            document.getElementById('receipt-modal').classList.add('hidden');
+        }
+
+        // Wellness Tea therapy
+        function selectTea(teaKey) {
+            activeTea = teaKey;
+            clearInterval(teaTimer);
+            isBrewing = false;
+            document.getElementById('tea-timer-btn').innerText = "차 우리기 시작";
+
+            const opts = ['peach', 'bamboo', 'chrysant'];
+            opts.forEach(opt => {
+                const btn = document.getElementById(`tea-opt-${opt}`);
+                if (opt === teaKey) {
+                    btn.className = "p-4 border-2 border-gold bg-gold/5 text-left flex flex-col justify-between h-36 rounded-sm";
+                } else {
+                    btn.className = "p-4 border border-gray-200 text-left flex flex-col justify-between h-36 rounded-sm";
+                }
+            });
+
+            const tea = teaData[teaKey];
+            document.getElementById('tea-disp-name').innerText = tea.name;
+            document.getElementById('tea-disp-desc').innerText = tea.desc;
+            document.getElementById('tea-disp-recommend').innerText = tea.recommend;
+            document.getElementById('tea-disp-time').innerText = tea.timeText;
+            document.getElementById('timer-visual-box').className = "w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center bg-white relative overflow-hidden";
+        }
+
+        function startTeaTimer() {
+            if (isBrewing) {
+                clearInterval(teaTimer);
+                isBrewing = false;
+                document.getElementById('tea-timer-btn').innerText = "다시 우려내기";
+                document.getElementById('tea-disp-time').innerText = teaData[activeTea].timeText;
+                return;
+            }
+
+            isBrewing = true;
+            document.getElementById('tea-timer-btn').innerText = "정지 및 초기화";
+            let secondsLeft = teaData[activeTea].seconds;
+
+            teaTimer = setInterval(() => {
+                if (secondsLeft <= 0) {
+                    clearInterval(teaTimer);
+                    isBrewing = false;
+                    alert("차 우리기 모래시계가 완료되었습니다. 따뜻하게 한 모금 음미해 보세요.");
+                    document.getElementById('tea-timer-btn').innerText = "완료";
+                    return;
+                }
+                secondsLeft--;
+                const m = Math.floor(secondsLeft / 60);
+                const s = secondsLeft % 60;
+                document.getElementById('tea-disp-time').innerText = `${m}분 ${s.toString().padStart(2, '0')}초`;
+            }, 1000);
+        }
+
+        // Vinyl lp sound scene player
+        function playLp(lpId) {
+            playingLpId = lpId;
+            document.getElementById('lp-spin-box').classList.remove('hidden');
+            let lpTitle = "Heonhwa Beach Dawn";
+            if (lpId === 'sunset') lpTitle = "Acoustic Sea Breeze";
+            else if (lpId === 'midnight') lpTitle = "Quiet Wave Meditation";
+
+            document.getElementById('lp-spin-title').innerText = lpTitle;
+        }
+
+        function stopLp() {
+            playingLpId = null;
+            document.getElementById('lp-spin-box').classList.add('hidden');
+        }
+
+        // Guestbook logic
+        function setNoteBg(colorClass) {
+            currentNoteBg = colorClass;
+            document.getElementById('col-bg-1').classList.remove('ring-2', 'ring-gold');
+            document.getElementById('col-bg-2').classList.remove('ring-2', 'ring-gold');
+            document.getElementById('col-bg-3').classList.remove('ring-2', 'ring-gold');
+
+            if (colorClass === 'bg-[#F2EFE9]') document.getElementById('col-bg-1').classList.add('ring-2', 'ring-gold');
+            else if (colorClass === 'bg-[#EBF0ED]') document.getElementById('col-bg-2').classList.add('ring-2', 'ring-gold');
+            else if (colorClass === 'bg-[#EAF3F5]') document.getElementById('col-bg-3').classList.add('ring-2', 'ring-gold');
+        }
+
+        function renderGuestNotes() {
+            const container = document.getElementById('guestnotes-container');
+            container.innerHTML = "";
+            guestNotes.forEach(note => {
+                const item = document.createElement('div');
+                item.className = `${note.bg} p-5 border border-gray-200/50 rounded shadow-sm relative space-y-3 font-serif-custom`;
+                item.innerHTML = `
+                    <div class="flex justify-between items-center text-[10px] text-ink/40 font-bold">
+                        <span>POSTED NOTE</span>
+                        <span>${note.date}</span>
+                    </div>
+                    <p class="text-xs text-ink/80 leading-relaxed font-light">${note.text}</p>
+                    <div class="text-[10px] text-gold font-bold text-right">— ${note.author}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function submitGuestNote(e) {
+            e.preventDefault();
+            const author = document.getElementById('guest-author').value.trim();
+            const text = document.getElementById('guest-text').value.trim();
+            if (!author || !text) return;
+
+            const date = new Date().toLocaleDateString('ko-KR').slice(0, -1);
+            guestNotes.unshift({
+                author,
+                text,
+                date,
+                bg: currentNoteBg
+            });
+
+            renderGuestNotes();
+            document.getElementById('guest-author').value = "";
+            document.getElementById('guest-text').value = "";
+        }
+
+        // Experience tab switching
+        function toggleExpTab(paneId) {
+            const panes = ['tea', 'lp', 'diary', 'ai'];
+            panes.forEach(pane => {
+                const el = document.getElementById(`ritual-pane-${pane}`);
+                const btn = document.getElementById(`exp-tab-${pane}`);
+                if (pane === paneId) {
+                    el.classList.remove('hidden');
+                    btn.className = "text-left py-2 border-b-2 border-gold text-ink font-semibold tracking-wider text-sm font-serif-custom";
+                } else {
+                    el.classList.add('hidden');
+                    btn.className = "text-left py-2 border-b-2 border-transparent text-ink/40 tracking-wider text-sm font-serif-custom";
+                }
+            });
+        }
+
+        // Butler Chat Logic
+        function sendChat() {
+            const inp = document.getElementById('chat-msg-input');
+            const msg = inp.value.trim();
+            if (!msg) return;
+
+            const scroller = document.getElementById('ai-chat-scroller');
+
+            // User Message
+            const userMsg = document.createElement('div');
+            userMsg.className = "text-right";
+            userMsg.innerHTML = `
+                <span class="text-ink/40 font-bold uppercase tracking-widest block text-[8px]">You</span>
+                <p class="bg-gray-100 border border-gray-200 inline-block p-3 rounded-l-lg max-w-[85%] mt-1 text-left font-light leading-relaxed">${msg}</p>
+            `;
+            scroller.appendChild(userMsg);
+            inp.value = "";
+            scroller.scrollTop = scroller.scrollHeight;
+
+            // Butler Response Simulator (With delightful Gangneung tips)
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = "text-left mt-4";
+                let reply = `강릉시 옥계면 헌화로 456의 기암괴석 경치를 감상하며 드라이브하기 좋은 헌화로 코스를 추천해 주셨군요! 헌화로는 한국에서 바다와 가장 가깝고도 아름다운 최고의 해안 도로입니다. 금진항에서 기암 절벽을 보며 달리시면 가슴이 뻥 뚫릴 것입니다. 또한, 정동진 조용한 솔바람을 즐기시고 등대 언덕 아래 에이드 카페에서 드립 커피 한 잔 하시는 것을 권유드립니다.`;
+                if (msg.includes('맛집') || msg.includes('먹을')) {
+                    reply = `윤슬 스테이 인근 강릉 헌화로 현지 맛집으로는 고소한 전복돌솥밥과 신선한 참가자미 물회를 판매하는 식당들이 항구 주위에 줄지어 위치하고 있습니다. 정갈한 사색을 즐기시기에 매우 적합하며 따뜻한 국물이 일품입니다.`;
+                } else if (msg.includes('카페')) {
+                    reply = `등대 바로 뒷길 언덕에 위치한 로컬 오션뷰 카페 '헌화 언덕'을 추천합니다. 정성스레 내려지는 싱그러운 핸드드립 커피와 금진항 은빛 파도를 형상화한 시원한 에이드를 바다 통창 조망으로 평화롭게 음미해 보실 수 있습니다.`;
+                }
+
+                botMsg.innerHTML = `
+                    <span class="text-gold font-bold uppercase tracking-widest block text-[8px]">Butler AI</span>
+                    <p class="bg-gray-50 border border-gray-100 p-3 rounded-r-lg max-w-[85%] mt-1 font-light leading-relaxed">${reply}</p>
+                `;
+                scroller.appendChild(botMsg);
+                scroller.scrollTop = scroller.scrollHeight;
+            }, 1000);
+        }
+
+        function openSeasonDetail() {
+            document.getElementById('season-modal').classList.remove('hidden');
+        }
+
+        function closeSeasonDetail() {
+            document.getElementById('season-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
