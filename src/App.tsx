@@ -383,13 +383,12 @@ const ScrollToTop = () => {
 const Navbar = ({ 
   currentPage, 
   onNavigate,
-  language,
-  setLanguage
+  language
 }: { 
   currentPage: Page, 
   onNavigate: (p: Page, roomId?: string | null, expTab?: 'tea' | 'guestbook' | 'sound', targetId?: string, forceRefresh?: boolean) => void,
   language: Language,
-  setLanguage: (l: Language) => void
+  setLanguage?: (l: Language) => void
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -478,70 +477,10 @@ const Navbar = ({
               >
                 {language === 'en' ? 'Book Now' : '실시간 예약'}
               </button>
-
-              {/* 2. KR / EN Toggle - Translucent glass styling */}
-              <div className={`flex items-center rounded-full p-1 border text-[11px] font-sans backdrop-blur-md transition-all ${
-                !isScrolled && isHome 
-                  ? 'bg-white/15 border-white/25 text-white/90 shadow-xs' 
-                  : 'bg-stone-900/10 border-stone-800/15 text-[#3A2E26] shadow-xs'
-              }`}>
-                <button
-                  type="button"
-                  onClick={() => setLanguage('ko')}
-                  className={`px-3 py-1 rounded-full font-medium transition-all cursor-pointer ${
-                    language === 'ko' 
-                      ? (!isScrolled && isHome ? 'bg-white/35 backdrop-blur-md text-white shadow-xs font-semibold' : 'bg-[#84654D]/80 backdrop-blur-md text-white shadow-xs font-semibold')
-                      : (!isScrolled && isHome ? 'text-white/70 hover:text-white hover:bg-white/15' : 'text-[#6B5A4E]/80 hover:text-stone-900 hover:bg-stone-900/10')
-                  }`}
-                >
-                  KR
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage('en')}
-                  className={`px-3 py-1 rounded-full font-medium transition-all cursor-pointer ${
-                    language === 'en' 
-                      ? (!isScrolled && isHome ? 'bg-white/35 backdrop-blur-md text-white shadow-xs font-semibold' : 'bg-[#84654D]/80 backdrop-blur-md text-white shadow-xs font-semibold')
-                      : (!isScrolled && isHome ? 'text-white/70 hover:text-white hover:bg-white/15' : 'text-[#6B5A4E]/80 hover:text-stone-900 hover:bg-stone-900/10')
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3 md:hidden">
-            {/* Mobile Language Toggle - Translucent glass styling */}
-            <div className={`flex items-center rounded-full p-0.5 border text-[10px] font-sans backdrop-blur-md ${
-              !isScrolled && isHome 
-                ? 'bg-white/15 border-white/25 text-white/90 shadow-2xs' 
-                : 'bg-stone-900/10 border-stone-800/15 text-[#3A2E26] shadow-2xs'
-            }`}>
-              <button
-                type="button"
-                onClick={() => setLanguage('ko')}
-                className={`px-2.5 py-0.5 rounded-full transition-all ${
-                  language === 'ko' 
-                    ? (!isScrolled && isHome ? 'bg-white/35 backdrop-blur-sm text-white font-bold shadow-2xs' : 'bg-[#84654D]/80 backdrop-blur-sm text-white font-bold shadow-2xs') 
-                    : (!isScrolled && isHome ? 'text-white/70 hover:bg-white/10' : 'text-[#6B5A4E]/80 hover:bg-stone-900/10')
-                }`}
-              >
-                KR
-              </button>
-              <button
-                type="button"
-                onClick={() => setLanguage('en')}
-                className={`px-2.5 py-0.5 rounded-full transition-all ${
-                  language === 'en' 
-                    ? (!isScrolled && isHome ? 'bg-white/35 backdrop-blur-sm text-white font-bold shadow-2xs' : 'bg-[#84654D]/80 backdrop-blur-sm text-white font-bold shadow-2xs') 
-                    : (!isScrolled && isHome ? 'text-white/70 hover:bg-white/10' : 'text-[#6B5A4E]/80 hover:bg-stone-900/10')
-                }`}
-              >
-                EN
-              </button>
-            </div>
-
             <button 
               className={`cursor-pointer ${navTextColor}`}
               onClick={() => setIsMenuOpen(true)}
@@ -577,28 +516,6 @@ const Navbar = ({
               </button>
             </div>
             
-            {/* Mobile Lang Selector */}
-            <div className="flex items-center gap-2 mb-6 bg-white p-1.5 rounded-xl border border-[#E3DED4]">
-              <button
-                type="button"
-                onClick={() => setLanguage('ko')}
-                className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${
-                  language === 'ko' ? 'bg-[#3A322C] text-white' : 'text-deep-ink/60'
-                }`}
-              >
-                한국어 (KR)
-              </button>
-              <button
-                type="button"
-                onClick={() => setLanguage('en')}
-                className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${
-                  language === 'en' ? 'bg-[#3A322C] text-white' : 'text-deep-ink/60'
-                }`}
-              >
-                English (EN)
-              </button>
-            </div>
-
             <div className="flex flex-col space-y-5">
               {navItems.map(item => (
                 <button 
@@ -3277,7 +3194,7 @@ export default function App() {
   const [experienceTab, setExperienceTab] = useState<'tea' | 'guestbook' | 'sound'>(() => {
     return (localStorage.getItem('experienceTab') as 'tea' | 'guestbook' | 'sound') || 'tea';
   });
-  const [language, setLanguage] = useState<Language>('ko');
+  const [language] = useState<Language>('ko');
   const [refreshKey, setRefreshKey] = useState<number>(0);
 
   // Legal Policies Modal State
@@ -3365,7 +3282,6 @@ export default function App() {
         currentPage={currentPage} 
         onNavigate={handleNavigate} 
         language={language}
-        setLanguage={setLanguage}
       />
 
       <main className="flex-1">
