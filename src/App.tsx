@@ -139,7 +139,7 @@ const BRAND_CONTENT = {
       nameKo: "2F 오션 베드룸",
       desc: "황금빛 일출과 잔잔한 파도가 머무는 곳. 아늑한 린넨 침구 속에서 오직 파도 소리에만 집중하는 쉼입니다.",
       descEn: "Awaken to golden sunrises and soothing waves, wrapped in cozy linen with only the sound of the ocean.",
-      longDesc: "침대에 누워 창밖으로 펼쳐지는 동해의 푸른 물결과 붉은 일출을 한눈에 담습니다. 최고급 프리미엄 매트리스와 오가닉 린넨 침구가 깊은 숙면을 돕고, 프라이빗 테라스로 스며드는 바닷바람이 편안한 휴식을 선사합니다.",
+      longDesc: "침대에 누워 창밖으로 펼쳐지는 동해의 푸른 물결과 붉은 일출을 한눈에 담아보세요. 오가닉 린넨 침구가 깊은 숙면을 돕고, 테라스에서 불어오는 시원한 바람 속에서 온전한 휴식을 누리실 수 있습니다.",
       longDescEn: "From bed, take in the vast blue waves and vibrant sunrise over the East Sea. Premium Simmons mattress and organic linen bedding ensure deep restorative sleep, complemented by gentle sea breezes from the private terrace.",
       image: oceanBedroomLuxuryNowin,
       features: ["시몬스 프리미엄 오션뷰 침실", "프라이빗 오션 테라스", "하이파이 오디오 시스템", "은은한 감성 무드 조명"],
@@ -249,6 +249,20 @@ const BRAND_CONTENT = {
 const FloatingConsultationButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const handleCopyPhone = () => {
+    navigator.clipboard.writeText("1544-0634");
+    setCopiedPhone(true);
+    setTimeout(() => setCopiedPhone(false), 2000);
+  };
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("hdweb@hdweb.co.kr");
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -276,8 +290,8 @@ const FloatingConsultationButton = () => {
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 0.3 }}
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="스테이 윤슬 실시간 상담 문의"
-        title="실시간 상담 문의"
+        aria-label="윤슬 스테이 상담 문의"
+        title="윤슬 스테이 상담 문의"
         className="fixed bottom-20 sm:bottom-21 md:bottom-22 right-5 sm:right-6 md:right-8 z-50 w-11 h-11 sm:w-12 sm:h-12 bg-[#84654D] hover:bg-[#6E533D] text-white rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-300 group border border-white/40 hover:scale-105 cursor-pointer"
       >
         <MessageCircle size={20} className="group-hover:scale-110 transition-transform duration-300" />
@@ -290,12 +304,12 @@ const FloatingConsultationButton = () => {
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className="fixed bottom-34 sm:bottom-36 right-5 sm:right-6 md:right-8 z-50 w-72 sm:w-80 bg-white rounded-2xl border border-[#E3DED4] p-5 shadow-2xl space-y-3"
+            className="fixed bottom-34 sm:bottom-36 right-5 sm:right-6 md:right-8 z-50 w-[310px] sm:w-[330px] bg-white rounded-2xl border border-[#E3DED4] p-5 shadow-2xl space-y-3"
           >
             <div className="flex items-center justify-between border-b border-[#E3DED4] pb-2.5">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#84654D] animate-pulse" />
-                <h4 className="text-[14px] font-serif font-bold text-deep-ink">윤슬 실시간 상담 문의</h4>
+                <h4 className="text-[14px] font-serif font-bold text-deep-ink">윤슬 스테이 상담 문의</h4>
               </div>
               <button 
                 type="button" 
@@ -308,28 +322,54 @@ const FloatingConsultationButton = () => {
             </div>
             
             <p className="text-[12px] text-deep-ink/75 font-serif leading-relaxed font-light">
-              객실 예약 상담, 맞춤 일정 및 편안한 머무름에 관한 문의는 카카오톡 또는 유선 전화로 편하게 남겨주세요.
+              예약 및 머무름에 관한 문의를 편하게 남겨주세요.
             </p>
 
             <div className="space-y-2 pt-1">
               <a
-                href="https://open.kakao.com"
+                href="https://pf.kakao.com/_fhxirX"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2.5 px-3 bg-[#84654D] hover:bg-[#6E533D] text-white text-[12px] font-serif font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer border border-[#84654D]"
+                className="group w-full py-2.5 px-3 bg-[#84654D] hover:bg-[#6E533D] text-white text-[12px] font-serif font-medium rounded-xl flex items-center justify-between gap-2 transition-all shadow-xs cursor-pointer border border-[#84654D]"
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
-                  <path d="M12 3C6.477 3 2 6.477 2 10.767c0 2.767 1.838 5.19 4.606 6.57-.203.748-.737 2.716-.843 3.125-.133.513.187.506.393.369.162-.108 2.57-1.745 3.606-2.45.728.106 1.48.161 2.238.161 5.523 0 10-3.477 10-7.775S17.523 3 12 3z"/>
-                </svg>
-                <span>카카오톡 1:1 상담 채널</span>
+                <div className="flex items-center gap-2">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
+                    <path d="M12 3C6.477 3 2 6.477 2 10.767c0 2.767 1.838 5.19 4.606 6.57-.203.748-.737 2.716-.843 3.125-.133.513.187.506.393.369.162-.108 2.57-1.745 3.606-2.45.728.106 1.48.161 2.238.161 5.523 0 10-3.477 10-7.775S17.523 3 12 3z"/>
+                  </svg>
+                  <span className="whitespace-nowrap">카카오톡 1:1 상담 채널</span>
+                </div>
+                <ArrowRight size={13} className="shrink-0 group-hover:translate-x-0.5 transition-transform" />
               </a>
-              <a
-                href="tel:1544-0634"
-                className="w-full py-2.5 px-3 bg-[#F7F5F0] hover:bg-[#EFECE6] text-deep-ink border border-[#E3DED4] text-[12px] font-serif font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-2xs cursor-pointer"
+              <button
+                type="button"
+                onClick={handleCopyPhone}
+                className="w-full py-2.5 px-3 bg-[#F7F5F0] hover:bg-[#EFECE6] text-deep-ink border border-[#E3DED4] text-[12px] font-serif font-medium rounded-xl flex items-center justify-between gap-2 transition-all shadow-2xs cursor-pointer whitespace-nowrap"
               >
-                <Phone size={13} className="text-[#84654D]" />
-                <span>유선 전화 상담 (1544-0634)</span>
-              </a>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Phone size={13} className="text-[#84654D] shrink-0" />
+                  <span className="whitespace-nowrap">전화 상담: 1544 - 0634</span>
+                </div>
+                {copiedPhone ? (
+                  <span className="text-[11px] text-[#84654D] font-bold flex items-center gap-1 shrink-0 whitespace-nowrap"><Check size={12} /> 복사 완료</span>
+                ) : (
+                  <Copy size={12} className="text-deep-ink/40 shrink-0" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="w-full py-2.5 px-3 bg-[#F7F5F0] hover:bg-[#EFECE6] text-deep-ink border border-[#E3DED4] text-[12px] font-serif font-medium rounded-xl flex items-center justify-between gap-2 transition-all shadow-2xs cursor-pointer whitespace-nowrap"
+              >
+                <div className="flex items-center gap-2 shrink-0">
+                  <Send size={13} className="text-[#84654D] shrink-0" />
+                  <span className="whitespace-nowrap">이메일: hdweb@hdweb.co.kr</span>
+                </div>
+                {copiedEmail ? (
+                  <span className="text-[11px] text-[#84654D] font-bold flex items-center gap-1 shrink-0 whitespace-nowrap"><Check size={12} /> 복사 완료</span>
+                ) : (
+                  <Copy size={12} className="text-deep-ink/40 shrink-0" />
+                )}
+              </button>
             </div>
           </motion.div>
         )}
@@ -484,6 +524,7 @@ const Navbar = ({
             <button 
               className={`cursor-pointer ${navTextColor}`}
               onClick={() => setIsMenuOpen(true)}
+              aria-label="메뉴 열기"
             >
               <Menu size={24} />
             </button>
@@ -499,9 +540,9 @@ const Navbar = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[60] bg-[#F7F5F0] flex flex-col p-8"
+            className="fixed inset-0 z-[60] bg-[#F7F5F0] flex flex-col p-8 sm:p-12 overflow-y-auto md:hidden"
           >
-            <div className="flex justify-between items-center mb-12">
+            <div className="flex justify-between items-center mb-16 shrink-0">
               <button 
                 onClick={() => {
                   setIsMenuOpen(false);
@@ -511,39 +552,72 @@ const Navbar = ({
               >
                 {BRAND_CONTENT.name}
               </button>
-              <button onClick={() => setIsMenuOpen(false)} className="text-deep-ink cursor-pointer">
+              <button onClick={() => setIsMenuOpen(false)} aria-label="메뉴 닫기" className="text-deep-ink cursor-pointer p-1">
                 <X size={24} />
               </button>
             </div>
             
-            <div className="flex flex-col space-y-5">
-              {navItems.map(item => (
-                <button 
-                  key={item.value + item.labelEn}
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    handleNavItemClick(item);
-                  }}
-                  className="text-base font-sans font-medium tracking-wider text-deep-ink text-left border-b border-[#E3DED4] pb-4 cursor-pointer hover:text-stone-700"
+            <div className="flex flex-col flex-1 justify-between max-w-md w-full">
+              <div className="flex flex-col space-y-6 w-full">
+                {navItems.map(item => {
+                  const isActive = currentPage === item.value;
+                  return (
+                    <button 
+                      key={item.value + item.labelEn}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleNavItemClick(item);
+                      }}
+                      className={`group text-[16px] font-serif tracking-wider text-left border-b border-[#E3DED4] pb-6 flex items-center justify-between cursor-pointer transition-colors ${
+                        isActive 
+                          ? 'text-[#84654D] font-bold' 
+                          : 'text-deep-ink font-medium hover:text-[#84654D]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        {isActive && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#84654D] shrink-0" />
+                        )}
+                        <span className={isActive ? 'text-[#84654D] font-bold' : ''}>
+                          {language === 'en' ? item.labelEn : item.labelKo}
+                        </span>
+                      </div>
+                      <ChevronRight 
+                        size={17} 
+                        className={`transition-transform duration-200 ${
+                          isActive 
+                            ? 'text-[#84654D]' 
+                            : 'text-[#84654D]/60 group-hover:text-[#84654D] group-hover:translate-x-1.5'
+                        }`} 
+                      />
+                    </button>
+                  );
+                })}
+                {/* Manual Booking Menu Item for active state */}
+                <button
+                   onClick={() => {
+                     setIsMenuOpen(false);
+                     onNavigate('booking', null, 'tea', undefined, true);
+                   }}
+                   className={`group text-[16px] font-serif tracking-wider text-left border-b border-[#E3DED4] pb-6 flex items-center justify-between cursor-pointer transition-colors ${
+                     currentPage === 'booking'
+                       ? 'text-[#84654D] font-bold' 
+                       : 'text-deep-ink font-medium hover:text-[#84654D]'
+                   }`}
                 >
-                  {language === 'en' ? item.labelEn : item.labelKo}
+                  <div className="flex items-center gap-2.5">
+                     {currentPage === 'booking' && (
+                       <span className="w-1.5 h-1.5 rounded-full bg-[#84654D] shrink-0" />
+                     )}
+                     <span className={currentPage === 'booking' ? 'text-[#84654D] font-bold' : ''}>
+                       {language === 'en' ? 'BOOKING' : '실시간 예약'}
+                     </span>
+                  </div>
+                  <ChevronRight size={17} className={`transition-transform duration-200 ${currentPage === 'booking' ? 'text-[#84654D]' : 'text-[#84654D]/60 group-hover:text-[#84654D] group-hover:translate-x-1.5'}`} />
                 </button>
-              ))}
-              <button 
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-                  document.documentElement.scrollTop = 0;
-                  document.body.scrollTop = 0;
-                  onNavigate('booking', null, 'tea', undefined, true);
-                }}
-                className="text-base font-sans font-medium tracking-wider text-[#523E2D] text-left border-b border-[#E3DED4] pb-4 flex items-center justify-between cursor-pointer"
-              >
-                <span>{language === 'en' ? 'Online Reservation' : '실시간 예약'}</span>
-                <span className="text-[11px] font-sans tracking-wider bg-[#523E2D]/10 text-[#523E2D] px-3 py-1 rounded-full font-semibold">
-                  {language === 'en' ? 'Book' : '바로가기'}
-                </span>
-              </button>
+              </div>
+
+
             </div>
           </motion.div>
         )}
@@ -561,7 +635,7 @@ interface PageHeaderProps {
 
 const PageHeader = ({ title, koTitle, subtitle, image }: PageHeaderProps) => {
   return (
-    <header className="relative h-[55vh] min-h-[380px] flex items-center justify-center overflow-hidden bg-deep-ink">
+    <header className="relative h-[55vh] min-h-[380px] md:max-lg:h-[42vh] md:max-lg:min-h-[310px] flex items-center justify-center overflow-hidden bg-deep-ink">
       <motion.div 
         initial={{ scale: 1.1, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.45 }}
@@ -638,7 +712,7 @@ const LegalPolicyModal: React.FC<LegalPolicyModalProps> = ({ isOpen, type, onClo
         {/* Modal Header */}
         <div className="px-6 py-5 border-b border-[#E3DED4] flex items-center justify-between bg-white">
           <div>
-            <span className="text-[11px] tracking-widest text-[#84654D] uppercase font-cormorant font-semibold block">
+            <span className="text-[11px] tracking-widest text-[#84654D] uppercase font-cormorant font-semibold block mb-2.5">
               {isPrivacy ? 'Privacy & Data Protection' : 'House Rules & Terms'}
             </span>
             <h3 className="text-xl font-serif text-deep-ink font-medium">
@@ -759,7 +833,7 @@ const LegalPolicyModal: React.FC<LegalPolicyModalProps> = ({ isOpen, type, onClo
             onClick={onClose}
             className="px-6 py-2.5 rounded-xl bg-[#84654D] hover:bg-[#6E533D] text-white text-xs font-serif font-medium transition-colors cursor-pointer"
           >
-            {language === 'en' ? 'Confirm & Close' : '확인 및 닫기'}
+            {language === 'en' ? 'Confirm' : '확인'}
           </button>
         </div>
       </motion.div>
@@ -781,34 +855,36 @@ const Footer: React.FC<FooterProps> = ({
   onOpenTerms
 }) => (
   <footer className="bg-[#33241B] text-white/90 py-16 md:py-20 px-8 md:px-20 border-t border-white/10 font-serif">
-    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
-      <div className="space-y-4">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 text-center md:text-left">
+      <div className="space-y-4 flex flex-col items-center md:items-start">
         <div className="text-[30px] md:text-[34px] font-cormorant tracking-[0.2em] text-white font-light">YUNSEUL</div>
-        <div className="flex flex-wrap gap-2 text-white/85 text-[12px]">
+        <div className="flex flex-wrap gap-2 text-white/85 text-[12px] justify-center md:justify-start">
           <a 
             href="https://instagram.com" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="px-3.5 py-1.5 rounded-full border border-white/25 bg-white/5 hover:bg-white/15 hover:text-white cursor-pointer transition-all font-serif"
+            className="px-3.5 py-1.5 rounded-full border border-white/25 bg-white/5 hover:bg-white/15 hover:text-white cursor-pointer transition-all font-serif inline-flex items-center justify-center w-fit shrink-0"
           >
             Instagram
           </a>
-          <a 
-            href="https://open.kakao.com" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="px-3.5 py-1.5 rounded-full border border-white/25 bg-white/5 hover:bg-white/15 hover:text-white cursor-pointer transition-all font-serif inline-flex items-center gap-1.5"
-          >
-            <span>KakaoTalk</span>
-          </a>
-          <a 
-            href="https://blog.naver.com" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="px-3.5 py-1.5 rounded-full border border-white/25 bg-white/5 hover:bg-white/15 hover:text-white cursor-pointer transition-all font-serif"
-          >
-            Blog
-          </a>
+          <div className="flex md:max-lg:flex-col md:max-lg:items-start gap-2">
+            <a 
+              href="https://pf.kakao.com/_fhxirX" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="px-3.5 py-1.5 rounded-full border border-white/25 bg-white/5 hover:bg-white/15 hover:text-white cursor-pointer transition-all font-serif inline-flex items-center justify-center gap-1.5 w-fit shrink-0"
+            >
+              <span>KakaoTalk</span>
+            </a>
+            <a 
+              href="https://blog.naver.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="px-3.5 py-1.5 rounded-full border border-white/25 bg-white/5 hover:bg-white/15 hover:text-white cursor-pointer transition-all font-serif inline-flex items-center justify-center w-fit shrink-0"
+            >
+              Blog
+            </a>
+          </div>
         </div>
       </div>
       
@@ -825,7 +901,7 @@ const Footer: React.FC<FooterProps> = ({
         <div className="text-[15px] uppercase tracking-widest text-white font-bold font-cormorant">Business Info</div>
         <div className="text-[13px] leading-relaxed space-y-2 font-serif font-light text-white/85">
           <p>{language === 'en' ? 'Name : YUNSEUL | CEO : Jeongmin Oh' : '상호 : 윤슬 | 대표 : 오정민'}</p>
-          <p>{language === 'en' ? 'Business Reg No : 130-37-46318' : '사업자 번호 : 130-37-46318'}</p>
+          <p className="md:max-lg:whitespace-nowrap">{language === 'en' ? 'Business Reg No : 130-37-46318' : '사업자 번호 : 130-37-46318'}</p>
           <p>{language === 'en' ? 'E-commerce Permit : No. 2010-Gyeonggi Bucheon-924' : '통신판매업신고 : 제 2010-경기부천-924호'}</p>
         </div>
       </div>
@@ -837,14 +913,14 @@ const Footer: React.FC<FooterProps> = ({
         <button
           type="button"
           onClick={onOpenPrivacy}
-          className="hover:text-white cursor-pointer transition-colors underline-offset-4 hover:underline bg-transparent border-0 p-0 text-[12px] font-serif tracking-widest text-white/60"
+          className="hover:text-white cursor-pointer transition-colors bg-transparent border-0 p-0 text-[12px] font-serif tracking-widest text-white/60"
         >
           {language === 'en' ? 'Privacy Policy' : '개인정보처리방침'}
         </button>
         <button
           type="button"
           onClick={onOpenTerms}
-          className="hover:text-white cursor-pointer transition-colors underline-offset-4 hover:underline bg-transparent border-0 p-0 text-[12px] font-serif tracking-widest text-white/60"
+          className="hover:text-white cursor-pointer transition-colors bg-transparent border-0 p-0 text-[12px] font-serif tracking-widest text-white/60"
         >
           {language === 'en' ? 'Terms of Service' : '이용약관'}
         </button>
@@ -870,7 +946,11 @@ const HomePage = ({
       tabLabelEn: "Oceanfront Tea",
       titleKo: "오션뷰 다도 체험",
       titleEn: "Oceanfront Tea Experience",
-      descKo: "동해의 아침 바다를 마주하며 백자 다기에 따뜻한 잎차를 우려 편안하게 하루를 깨워보세요.",
+      descKo: (
+        <>
+          동해의 아침 바다를 마주하며 백자 다기에 <br className="md:hidden" />따뜻한 잎차를 우려 편안하게 하루를 <br className="md:hidden" />깨워보세요.
+        </>
+      ),
       descEn: "Brew warm signature tea in handcrafted porcelain facing the morning sea, quietly greeting a fresh day.",
       highlights: [
         { 
@@ -880,8 +960,8 @@ const HomePage = ({
           descEn: 'Gently pour tea into handcrafted white porcelain cups that preserve warmth and delicate notes.' 
         },
         { 
-          labelKo: '시그니처 잎차 3종 테이스팅',
-          labelEn: '3 Signature Tea Tasting', 
+          labelKo: '시그니처 잎차 테이스팅',
+          labelEn: 'Signature Tea Tasting', 
           descKo: '솔잎차, 감물차, 메밀차 중 오늘의 기분에 어울리는 차를 골라 그윽한 향을 음미해보세요.',
           descEn: 'Choose among coastal pine, persimmon leaf, and buckwheat blends to match your morning mood.' 
         },
@@ -905,7 +985,11 @@ const HomePage = ({
       tabLabelEn: "Study & Writing",
       titleKo: "오션뷰 서재 & 기록",
       titleEn: "Ocean Study & Writing",
-      descKo: "스마트폰을 잠시 내려놓고 파도 소리를 들으며 코튼 원고지에 나만의 생각을 연필로 기록해보세요.",
+      descKo: (
+        <>
+          스마트폰을 잠시 내려놓고 파도 소리를 들으며 코튼 원고지에 나만의 생각을 연필로 <br className="md:hidden" />기록해보세요.
+        </>
+      ),
       descEn: "Set digital devices aside and write down your quiet thoughts with a pencil on textured paper by the waves.",
       highlights: [
         { 
@@ -921,8 +1005,8 @@ const HomePage = ({
           descEn: 'Read heartwarming notes left by past travelers and add a gentle sentence of your own.' 
         },
         { 
-          labelKo: '별빛 사색 서재 & LP 턴테이블',
-          labelEn: 'Starlight Study & Vinyl Record', 
+          labelKo: '서재 & LP 턴테이블',
+          labelEn: 'Study & Vinyl Record', 
           descKo: '마음에 드는 LP 음악을 턴테이블에 올리고, 파도 소리와 함께 시집의 책장을 넘겨보세요.',
           descEn: 'Place a curated vinyl record on the turntable and turn pages by the scenic ocean window.' 
         }
@@ -940,7 +1024,11 @@ const HomePage = ({
       tabLabelEn: "Sound Experience",
       titleKo: "싱잉볼 사운드 체험",
       titleEn: "Singing Bowl Sound Experience",
-      descKo: "밤바다의 파도 소리에 맞춰 싱잉볼을 조용히 울리며 하루의 피로와 복잡한 생각을 비워보세요.",
+      descKo: (
+        <>
+          밤바다의 파도 소리에 맞춰 싱잉볼을 조용히 울리며 하루의 피로와 복잡한 생각을 <br className="md:hidden" />비워보세요.
+        </>
+      ),
       descEn: "Strike the singing bowl in rhythm with nocturnal tides, letting resonant tones release daily fatigue.",
       highlights: [
         { 
@@ -1003,7 +1091,10 @@ const HomePage = ({
           className="relative z-10 text-center space-y-8 px-6"
         >
           <span className="text-[14px] md:text-base tracking-[0.35em] text-white/85 uppercase font-cormorant font-medium block">
-            {language === 'en' ? 'PRIVATE SEASIDE SANCTUARY & HEALING' : 'EMOTIONAL PRIVATE STAY & HEALING'}
+            <span className="md:hidden">PRIVATE HEALING STAY</span>
+            <span className="hidden md:inline">
+              {language === 'en' ? 'PRIVATE SEASIDE SANCTUARY & HEALING' : 'EMOTIONAL PRIVATE STAY & HEALING'}
+            </span>
           </span>
           <h1 className="text-[28px] md:text-[46px] lg:text-[58px] font-cormorant text-white uppercase tracking-[0.2em] leading-tight font-light">
             YUNSEUL<br />
@@ -1016,7 +1107,7 @@ const HomePage = ({
    
         {/* Scroll Indicator */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center space-y-4">
-          <span className="text-[13px] text-white/50 tracking-[0.35em] uppercase font-cormorant font-bold">Scroll</span>
+          <span className="text-[11px] md:text-[13px] text-white/50 tracking-[0.35em] uppercase font-cormorant font-bold">Scroll</span>
           <div className="w-px h-12 bg-white/20 relative overflow-hidden">
             <motion.div 
               animate={{ y: [0, 48] }}
@@ -1028,42 +1119,50 @@ const HomePage = ({
       </header>
    
       {/* Section 01 - Intro */}
-      <section id="home-intro" className="py-32 px-6 md:px-12 lg:px-24 bg-[#F7F5F0] overflow-hidden border-b border-[#E3DED4]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+      <section id="home-intro" className="pt-20 pb-14 md:py-32 md:max-lg:py-20 px-6 md:px-12 lg:px-24 bg-[#F7F5F0] overflow-hidden border-b border-[#E3DED4]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 md:max-lg:gap-7 lg:gap-24 items-center">
           
           {/* Left Text Column: Editorial & Storytelling */}
-          <div className="lg:col-span-5 space-y-8">
-            <div className="space-y-3">
+          <div className="lg:col-span-5 space-y-8 max-lg:space-y-6 max-lg:text-center max-lg:flex max-lg:flex-col max-lg:items-center">
+            <div className="space-y-3 max-lg:space-y-2 max-lg:flex max-lg:flex-col max-lg:items-center">
               <span className="text-[15px] tracking-wider text-[#84654D] uppercase font-cormorant font-semibold block">Introduction</span>
-              <h2 className="text-[30px] font-serif leading-tight text-deep-ink tracking-wide font-light">
+              <h2 className="text-[24px] md:text-[28px] font-serif leading-tight text-deep-ink tracking-wide font-light max-lg:text-center">
                 {language === 'en' ? (
-                  <>The Beginning of<br />Serene Sanctuary</>
+                  <>The Beginning of Serene Sanctuary</>
                 ) : (
-                  <>바다와 마주하는<br />고요한 안식의 시작</>
+                  <>바다와 함께하는 휴식 공간</>
                 )}
               </h2>
             </div>
 
             {/* Accent warm vertical divider line & elegant quote */}
-            <div className="flex gap-6 items-stretch">
-              <div className="w-0.5 bg-[#84654D]/40 shrink-0" />
-              <p className="text-base font-serif text-deep-ink/90 font-light leading-relaxed">
+            <div className="flex gap-6 items-stretch max-lg:flex-col max-lg:items-center max-lg:gap-3">
+              <div className="w-0.5 bg-[#84654D]/40 shrink-0 max-lg:w-12 max-lg:h-0.5" />
+              <p className="text-base font-serif text-deep-ink/90 font-light leading-relaxed max-lg:text-center">
                 {language === 'en' 
                   ? '"Deep tranquility found through emptying, where only nature whispers."'
-                  : '"비움으로써 마주하는 깊은 평온, 자연의 소리만이 나지막이 울리는 여백의 시간."'}
+                  : (
+                    <>
+                      "비움으로써 마주하는 깊은 평온, 자연의 <br className="md:hidden" />소리만이 나지막이 울리는 여백의 시간."
+                    </>
+                  )}
               </p>
             </div>
     
-            <p className="text-deep-ink/75 text-[13px] md:text-[14px] leading-relaxed font-light font-serif">
+            <p className="text-deep-ink/75 text-[13px] md:text-[14px] leading-relaxed font-light font-serif max-lg:text-center">
               {language === 'en' ? (
                 'Where the shimmering East Sea horizon and gentle waves greet your days. At Yunseul Stay, set aside everyday clamor and embrace a peaceful, unhurried rest focused entirely on yourself amidst the ocean breeze and warm sunlight.'
               ) : (
-                '창밖으로 끝없이 펼쳐지는 동해의 푸른 윤슬과 잔잔한 파도 소리가 머무는 자리입니다. 윤슬스테이에서 일상의 번잡함을 잠시 내려놓고, 바닷바람과 햇살의 온기 속에서 온전히 나에게 머무는 깊은 쉼을 누려보세요.'
+                <>
+                  창밖으로 끝없이 펼쳐지는 동해의 푸른 윤슬과 잔잔한 파도 소리가 머무는 자리입니다.{' '}<br className="md:max-lg:block hidden" />
+                  윤슬스테이에서 일상의 번잡함을 잠시 내려놓고, 바닷바람과 햇살의 온기 속에서<br className="md:max-lg:block hidden" />
+                  온전히 나에게 머무는 깊은 쉼을 누려보세요.
+                </>
               )}
             </p>
 
-            {/* Explore Spaces Button */}
-            <div className="pt-2">
+            {/* Explore Spaces Button (Desktop only; on mobile it is placed below the photos, on tablet hidden) */}
+            <div className="pt-2 hidden lg:block">
               <button
                 type="button"
                 onClick={() => {
@@ -1079,7 +1178,7 @@ const HomePage = ({
           </div>
     
           {/* Right Image Column: Luxury Overlapping Image Frame */}
-          <div className="lg:col-span-7 relative w-full pt-12 lg:pt-0">
+          <div className="lg:col-span-7 relative w-full pt-4 md:pt-12 md:max-lg:pt-2 lg:pt-0">
             <motion.div 
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -1109,6 +1208,21 @@ const HomePage = ({
                 <div className="absolute inset-0 bg-black/[0.05]" />
               </div>
             </motion.div>
+
+            {/* Mobile Explore Spaces Button (placed below photo as requested, hidden on tablet md:max-lg & desktop lg) */}
+            <div className="lg:hidden md:max-lg:hidden pt-6 flex justify-center w-full">
+              <button
+                type="button"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: 'instant' });
+                  onNavigate('rooms');
+                }}
+                className="inline-flex items-center gap-2.5 px-6 py-3 bg-[#84654D] hover:bg-[#6E533D] text-white text-[12px] font-serif tracking-wider rounded-full transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer group"
+              >
+                <span>{language === 'en' ? 'Explore Spaces' : '공간 둘러보기'}</span>
+                <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1118,8 +1232,10 @@ const HomePage = ({
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="text-center space-y-3 max-w-2xl mx-auto flex flex-col items-center">
             <span className="text-[15px] tracking-wider text-[#84654D] uppercase font-cormorant font-semibold block">Exclusive Spaces</span>
-            <h2 className="text-2xl md:text-3xl font-serif text-deep-ink uppercase tracking-wider font-light leading-snug">
-              {language === 'en' ? 'Four Private Sanctuaries by the Sea' : '윤슬을 품은 4개의 프라이빗 공간'}
+            <h2 className="text-[24px] md:text-[28px] font-serif text-deep-ink uppercase tracking-wider font-light leading-snug">
+              {language === 'en' ? 'Four Private Sanctuaries by the Sea' : (
+                <>윤슬을 품은 4개의 <span className="hidden md:inline">프라이빗 </span>공간</>
+              )}
             </h2>
             <p className="text-[13px] md:text-sm text-deep-ink/70 font-serif leading-relaxed font-light text-center max-w-3xl">
               {language === 'en' 
@@ -1227,7 +1343,7 @@ const HomePage = ({
       </section>
 
       {/* Section 03: A DAY OF HEALING - Smooth Sliding Carousel (Placed at the bottom of HomePage) */}
-      <section className="bg-[#F7F5F0] py-24 md:py-32 border-b border-[#E3DED4]">
+      <section className="bg-[#F7F5F0] pt-24 md:pt-32 pb-20 md:pb-28 border-b border-[#E3DED4]">
         <div className="max-w-6xl mx-auto px-6 md:px-12 space-y-12">
           
           {/* Header */}
@@ -1235,15 +1351,47 @@ const HomePage = ({
             <span className="text-[15px] tracking-wider text-[#84654D] font-cormorant font-semibold uppercase block">
               TIMELESS HEALING EXPERIENCES
             </span>
-            <h2 className="text-2xl md:text-3xl font-serif font-light text-deep-ink">
-              {language === 'en' ? "Yunseul Stay Signature Healing Programs" : "윤슬 스테이 시그니처 힐링 프로그램"}
+            <h2 className="text-[24px] md:text-[28px] font-serif font-light text-deep-ink">
+              {language === 'en' ? (
+                <><span className="hidden md:inline">Yunseul Stay </span>Signature Healing Programs</>
+              ) : (
+                <><span className="hidden md:inline">윤슬 스테이 </span>시그니처 힐링 프로그램</>
+              )}
             </h2>
             <p className="text-[13px] md:text-sm text-deep-ink/75 font-serif leading-relaxed max-w-2xl">
               {language === 'en'
                 ? 'Three curated healing programs designed to help you relax and focus entirely on your wellness.'
-                : '오롯이 나에게 집중하며 심신의 피로를 비워내는 3가지 핵심 힐링 프로그램입니다.'}
+                : (
+                  <>
+                    <span className="hidden md:inline">오롯이 나에게 집중하며 </span>심신의 피로를 비워내는 3가지 핵심 <span className="hidden md:inline">힐링 </span>프로그램입니다.
+                  </>
+                )}
             </p>
             <div className="w-12 h-px bg-[#84654D] mt-3" />
+          </div>
+
+          {/* Mobile Tab Navigation placed ABOVE Card Box with the same linebar design as ExperiencePage */}
+          <div className="md:hidden w-full flex items-center justify-start gap-2.5 overflow-x-auto pb-3 px-4 sm:px-6 [scrollbar-width:thin] [scrollbar-color:#BFAF9F_#EDE7DF] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-[#EDE7DF] [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#BFAF9F] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-button]:hidden">
+            <div className="flex items-center gap-2 flex-nowrap min-w-max">
+              {healingSlides.map((slide, sIdx) => {
+                const isActive = activeHealingIndex === sIdx;
+                return (
+                  <button
+                    key={sIdx}
+                    type="button"
+                    onClick={() => setActiveHealingIndex(sIdx)}
+                    className={`shrink-0 px-4 py-2.5 rounded-full text-xs font-serif transition-transform duration-300 flex items-center gap-2 cursor-pointer hover:-translate-y-1 ${
+                      isActive
+                        ? 'bg-[#84654D] text-white shadow-md font-medium'
+                        : 'bg-white text-deep-ink/75 border border-[#E3DED4] shadow-2xs hover:border-[#84654D]/50 hover:bg-[#F7F5F0]'
+                    }`}
+                  >
+                    <span className="font-sans font-bold text-[11px] opacity-80">0{sIdx + 1}</span>
+                    <span className="whitespace-nowrap">{language === 'en' ? slide.tabLabelEn : slide.tabLabelKo}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Sliding Carousel Stage */}
@@ -1273,25 +1421,25 @@ const HomePage = ({
                     </div>
 
                     {/* Narrative Details */}
-                    <div className="lg:col-span-6 space-y-5">
-                      <div className="space-y-2.5">
+                    <div className="lg:col-span-6 space-y-5 text-center md:text-left flex flex-col items-center md:items-start">
+                      <div className="space-y-2.5 flex flex-col items-center md:items-start w-full">
                         {/* Floor & Time Single Annotation Badge */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-center md:justify-start gap-2">
                           <span className="px-3.5 py-1 bg-[#84654D]/10 text-[#84654D] border border-[#84654D]/25 font-serif font-medium text-xs tracking-wide rounded-full shadow-2xs">
                             {language === 'en' ? currentSlide.floorTimeEn : currentSlide.floorTimeKo}
                           </span>
                         </div>
 
-                        <h3 className="text-xl md:text-2xl font-serif text-deep-ink font-light leading-snug">
+                        <h3 className="text-xl md:text-2xl font-serif text-deep-ink font-light leading-snug text-center md:text-left">
                           {language === 'en' ? currentSlide.titleEn : currentSlide.titleKo}
                         </h3>
                       </div>
 
-                      <p className="text-[13.5px] text-deep-ink/75 font-serif font-light leading-relaxed">
+                      <p className="text-[13.5px] text-deep-ink/75 font-serif font-light leading-relaxed text-center md:text-left">
                         {language === 'en' ? currentSlide.descEn : currentSlide.descKo}
                       </p>
 
-                      <div className="pt-2">
+                      <div className="pt-2 flex items-center justify-center md:justify-between w-full">
                         <button
                           type="button"
                           onClick={() => currentSlide.target()}
@@ -1300,6 +1448,40 @@ const HomePage = ({
                           <span>{language === 'en' ? currentSlide.actionEn : currentSlide.actionKo}</span>
                           <ArrowRight size={13} className="group-hover/btn:translate-x-0.5 transition-transform" />
                         </button>
+
+                        {/* Tablet version: Positioned above the line at the same row as the left button, keeping horizontal right position */}
+                        <div className="hidden md:flex lg:hidden items-center gap-3">
+                          <div className="flex items-center gap-1.5 mr-1">
+                            {healingSlides.map((_, dotIdx) => (
+                              <button
+                                key={dotIdx}
+                                type="button"
+                                onClick={() => setActiveHealingIndex(dotIdx)}
+                                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                                  activeHealingIndex === dotIdx ? 'w-6 bg-[#84654D]' : 'w-1.5 bg-[#84654D]/25 hover:bg-[#84654D]/50'
+                                }`}
+                                aria-label={`슬라이드 ${dotIdx + 1}로 이동`}
+                              />
+                            ))}
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => setActiveHealingIndex((prev) => (prev === 0 ? healingSlides.length - 1 : prev - 1))}
+                            className="w-8 h-8 rounded-xl bg-white border border-[#E3DED4] hover:border-[#84654D] hover:bg-[#84654D] hover:text-white text-deep-ink flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                            aria-label="이전 리추얼 슬라이드"
+                          >
+                            <ChevronLeft size={15} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setActiveHealingIndex((prev) => (prev === healingSlides.length - 1 ? 0 : prev + 1))}
+                            className="w-8 h-8 rounded-xl bg-white border border-[#E3DED4] hover:border-[#84654D] hover:bg-[#84654D] hover:text-white text-deep-ink flex items-center justify-center transition-all cursor-pointer shadow-xs"
+                            aria-label="다음 리추얼 슬라이드"
+                          >
+                            <ChevronRight size={15} />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -1307,10 +1489,10 @@ const HomePage = ({
               })()}
             </AnimatePresence>
 
-            {/* Relocated Navigation Controls: Theme buttons and Arrow Buttons at the bottom */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#E3DED4]">
+            {/* Navigation Controls: Theme buttons and Arrow Buttons at the bottom (Desktop only) */}
+            <div className="hidden lg:flex items-center justify-between gap-5 pt-6 border-t border-[#E3DED4]">
               {/* Step indicator tabs with descriptive titles instead of just times */}
-              <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 {healingSlides.map((slide, sIdx) => {
                   const isActive = activeHealingIndex === sIdx;
                   return (
@@ -1318,7 +1500,7 @@ const HomePage = ({
                       key={sIdx}
                       type="button"
                       onClick={() => setActiveHealingIndex(sIdx)}
-                      className={`px-4 py-2 rounded-full text-xs font-serif transition-all duration-300 cursor-pointer flex items-center gap-2 ${
+                      className={`px-3.5 py-2 sm:px-4 sm:py-2 rounded-full text-[11.5px] sm:text-xs font-serif transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 ${
                         isActive
                           ? 'bg-[#84654D] text-white shadow-xs font-medium'
                           : 'bg-white text-deep-ink/70 border border-[#E3DED4] hover:border-[#84654D]/50 hover:bg-[#F7F5F0]'
@@ -1332,7 +1514,7 @@ const HomePage = ({
               </div>
 
               {/* Prev / Next Arrows and Dot Indicators */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center gap-3 w-full sm:w-auto">
                 <div className="flex items-center gap-1.5 mr-1">
                   {healingSlides.map((_, dotIdx) => (
                     <button
@@ -1384,10 +1566,16 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
   });
 
   const toggleAccordion = (id: string) => {
-    setOpenAccordions(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+    setOpenAccordions(prev => {
+      const isOpening = !prev[id];
+      return {
+        'rules': false,
+        'pool': false,
+        'amenities': false,
+        'refund': false,
+        [id]: isOpening
+      };
+    });
   };
 
   const handleNaverBooking = () => {
@@ -1398,25 +1586,39 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
     <div className="space-y-10 font-serif text-[13px]">
       {/* Accordion List for Pre-Booking Guidelines */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between px-1 pb-2">
-          <div className="space-y-1">
-            <span className="text-[13px] font-cormorant font-bold uppercase tracking-wider text-[#7B6248] block">PRE-BOOKING GUIDELINES</span>
-            <h4 className="text-lg md:text-xl font-serif text-deep-ink font-light">
-              {language === 'en' ? 'Essential Checkpoints Prior to Booking' : '예약 전 필수 확인사항'}
+        <div className="flex items-center justify-center px-1 pb-6 mb-5 text-center w-full">
+          <div className="space-y-2 text-center w-full">
+            <span className="text-[13px] md:text-[14px] font-cormorant font-bold uppercase tracking-wider text-[#9E6B4A] block text-center">BOOKING GUIDELINES</span>
+            <h4 className="text-[24px] md:text-[28px] lg:text-[28px] font-serif text-deep-ink font-light text-center">
+              {language === 'en' ? 'Essential Checkpoints Prior to Booking' : '예약 전 필수 안내사항'}
             </h4>
+            <p className="text-[13px] md:text-sm text-deep-ink/70 font-serif leading-relaxed font-light text-center max-w-xl mx-auto pt-1">
+              {language === 'en'
+                ? 'Essential reservation guidelines, check-in instructions, and stay policies for your serene retreat.'
+                : (
+                  <>
+                    윤슬 스테이의 이용 수칙 및 안내사항을 <br className="md:hidden" />꼭 확인해 주시기 바랍니다.
+                  </>
+                )}
+            </p>
           </div>
         </div>
 
         {/* Accordion Item 1: 입퇴실 시간 및 필수 이용 수칙 */}
-        <div className="bg-[#F7F5F0] border border-[#E3DED4] rounded-xl overflow-hidden transition-all duration-300">
+        <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+          openAccordions['rules'] 
+            ? 'bg-white border-[#84654D] shadow-sm ring-1 ring-[#84654D]/20' 
+            : 'bg-[#F7F5F0] border-[#E3DED4] hover:border-[#84654D]/40 hover:bg-white/60'
+        }`}>
           <button
             type="button"
             onClick={() => toggleAccordion('rules')}
-            className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-white/60 transition-colors group"
+            className="w-full p-4 sm:p-5 md:p-6 text-left flex items-center justify-between gap-3 sm:gap-4 cursor-pointer transition-colors group"
           >
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-full bg-[#7B6248]/10 text-[#7B6248] font-cormorant font-bold text-sm flex items-center justify-center">01</span>
-              <div>
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#84654D]/10 text-[#84654D] font-cormorant font-bold text-sm flex items-center justify-center border border-[#84654D]/20 shrink-0 group-hover:bg-[#84654D] group-hover:text-white transition-colors shadow-2xs">01</span>
+              {/* Desktop Title & Subtitle */}
+              <div className="hidden md:block">
                 <h5 className="text-base font-serif font-medium text-deep-ink">
                   {language === 'en' ? 'Occupancy, Check-in/out & House Guidelines' : '투숙 인원, 입퇴실 시간 및 이용 수칙'}
                 </h5>
@@ -1424,13 +1626,22 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                   {language === 'en' ? 'Standard 2 / Max 8 guests, contactless check-in, non-smoking policy & safety' : '기준 2인 / 최대 8인, 체크인/아웃 시간, 비대면 입실 및 안전 수칙'}
                 </p>
               </div>
+              {/* Mobile Concise Single-Line Core Design */}
+              <div className="md:hidden flex items-center gap-2 flex-wrap min-w-0">
+                <span className="text-[13.5px] font-serif font-medium text-deep-ink tracking-tight">
+                  {language === 'en' ? 'Occupancy & Rules' : '투숙 인원 & 이용 수칙'}
+                </span>
+                <span className="inline-flex items-center text-[10.5px] font-sans font-medium text-[#84654D] bg-[#84654D]/10 px-2 py-0.5 rounded-full border border-[#84654D]/20 shrink-0">
+                  {language === 'en' ? 'Max 8 · Contactless' : '기준 2인(최대 8인) · 비대면'}
+                </span>
+              </div>
             </div>
-            <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
+            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center transition-all duration-300 shrink-0 ${
               openAccordions['rules'] 
                 ? 'rotate-180 bg-[#84654D] text-white border-[#84654D]' 
                 : 'bg-white text-[#7B6248]/60 border-[#E3DED4] group-hover:border-[#84654D] group-hover:text-[#84654D] group-hover:bg-[#84654D]/10'
             }`}>
-              <ChevronDown size={16} />
+              <ChevronDown size={15} />
             </div>
           </button>
 
@@ -1445,39 +1656,69 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
               >
                 <div className="px-6 pb-6 pt-2 border-t border-[#E3DED4] space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div className="bg-white border border-[#E3DED4] p-4 rounded-lg space-y-1">
+                    <div className="bg-[#F7F5F0] border border-[#E3DED4] p-4 rounded-lg space-y-1">
                       <span className="text-[11px] uppercase font-cormorant tracking-wider text-[#7B6248] font-bold">OCCUPANCY</span>
                       <p className="text-sm font-serif text-deep-ink font-semibold">
                         {language === 'en' ? 'Standard 2 / Max 8 Guests' : '기준 2인 / 최대 8인'}
                       </p>
-                      <p className="text-[11px] text-deep-ink/65 pt-1 border-t border-[#E3DED4]">
-                        {language === 'en' ? 'Entire villa single-party exclusive use' : '1일 1팀 전관 독채 단독 프라이빗 이용'}
+                      <p className="text-[11px] text-deep-ink/65 pt-1 border-t border-[#E3DED4] md:max-lg:whitespace-nowrap md:max-lg:truncate">
+                        {language === 'en' ? (
+                          <>
+                            <span className="hidden md:max-lg:inline">Entire villa exclusive use</span>
+                            <span className="md:max-lg:hidden">Entire villa single-party exclusive use</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="hidden md:max-lg:inline">1일 1팀 전관 독채 이용</span>
+                            <span className="md:max-lg:hidden">1일 1팀 전관 독채 단독 프라이빗 이용</span>
+                          </>
+                        )}
                       </p>
                     </div>
-                    <div className="bg-white border border-[#E3DED4] p-4 rounded-lg space-y-1">
+                    <div className="bg-[#F7F5F0] border border-[#E3DED4] p-4 rounded-lg space-y-1">
                       <span className="text-[11px] uppercase font-cormorant tracking-wider text-[#7B6248] font-bold">CHECK-IN</span>
                       <p className="text-sm font-serif text-deep-ink font-semibold">
                         {language === 'en' ? 'After 16:00 (4 PM)' : '오후 16:00 이후'}
                       </p>
-                      <p className="text-[11px] text-deep-ink/65 pt-1 border-t border-[#E3DED4]">
-                        {language === 'en' ? 'Keypad passcode via SMS on arrival morning' : '입실 당일 오전 비대면 도어록 번호 발송'}
+                      <p className="text-[11px] text-deep-ink/65 pt-1 border-t border-[#E3DED4] md:max-lg:whitespace-nowrap md:max-lg:truncate">
+                        {language === 'en' ? (
+                          <>
+                            <span className="hidden md:max-lg:inline">Keypad passcode via SMS</span>
+                            <span className="md:max-lg:hidden">Keypad passcode via SMS on arrival morning</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="hidden md:max-lg:inline">당일 오전 도어록 번호 발송</span>
+                            <span className="md:max-lg:hidden">입실 당일 오전 비대면 도어록 번호 발송</span>
+                          </>
+                        )}
                       </p>
                     </div>
-                    <div className="bg-white border border-[#E3DED4] p-4 rounded-lg space-y-1">
+                    <div className="bg-[#F7F5F0] border border-[#E3DED4] p-4 rounded-lg space-y-1">
                       <span className="text-[11px] uppercase font-cormorant tracking-wider text-[#84654D] font-bold">CHECK-OUT</span>
                       <p className="text-sm font-serif text-deep-ink font-semibold">
                         {language === 'en' ? 'Before 11:00 (11 AM)' : '오전 11:00 이전'}
                       </p>
-                      <p className="text-[11px] text-deep-ink/65 pt-1 border-t border-[#E3DED4]">
-                        {language === 'en' ? 'Thorough sanitization & fresh linens' : '소독 및 최고급 침구 정밀 세팅 진행'}
+                      <p className="text-[11px] text-deep-ink/65 pt-1 border-t border-[#E3DED4] md:max-lg:whitespace-nowrap md:max-lg:truncate">
+                        {language === 'en' ? (
+                          <>
+                            <span className="hidden md:max-lg:inline">Sanitization & fresh linens</span>
+                            <span className="md:max-lg:hidden">Thorough sanitization & fresh linens</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="hidden md:max-lg:inline">소독 및 호텔식 침구 세팅</span>
+                            <span className="md:max-lg:hidden">소독 및 최고급 침구 정밀 세팅 진행</span>
+                          </>
+                        )}
                       </p>
                     </div>
                   </div>
 
-                  <div className="bg-white border border-[#E3DED4] p-5 rounded-lg space-y-2.5 text-[12.5px] text-deep-ink/80 leading-relaxed font-serif">
+                  <div className="bg-[#F7F5F0] border border-[#E3DED4] p-5 rounded-lg space-y-2.5 text-[12.5px] text-deep-ink/80 leading-relaxed font-serif">
                     {language === 'en' ? (
                       <>
-                        <p>&middot; <strong>Capacity Policy:</strong> Standard 2 guests, up to 8 guests maximum. Extra guest fee: ₩30,000 / night per person (luxury bedding & amenities included).</p>
+                        <p>&middot; <strong>Capacity Policy:</strong> Standard 2 guests, up to 8 guests maximum. Extra guest fee: ₩30,000 / night per person.</p>
                         <p>&middot; <strong>No Pets:</strong> Pets are strictly prohibited to prevent allergens and preserve room condition.</p>
                         <p>&middot; <strong>Entirely Non-Smoking:</strong> Indoor smoking including e-cigarettes is strictly prohibited; disinfection fees apply on violation.</p>
                         <p>&middot; <strong>No Unregistered Guests:</strong> Only registered guests may enter and stay in the estate.</p>
@@ -1485,7 +1726,7 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                       </>
                     ) : (
                       <>
-                        <p>&middot; <strong>인원 기준 안내:</strong> 기준 2인 / 최대 8인까지 입실 가능하며, 기준 인원 초과 시 1인 1박 30,000원의 추가 요금이 적용됩니다. (최고급 침구 및 어메니티 일체 포함)</p>
+                        <p>&middot; <strong>인원 기준 안내:</strong> 기준 2인 / 최대 8인까지 입실 가능하며, 기준 인원 초과 시 1인 1박 30,000원의 추가 요금이 적용됩니다.</p>
                         <p>&middot; <strong>반려동물 동반 불가:</strong> 알러지 방지 및 청결한 룸 컨디션 유지를 위해 반려동물 동반 입실이 엄격히 제한됩니다.</p>
                         <p>&middot; <strong>실내 전 구역 절대 금연:</strong> 전자담배를 포함한 실내 흡연은 절대 금지되며, 위반 시 특수 방역 청소비가 청구됩니다.</p>
                         <p>&middot; <strong>외부 방문객 입실 불가:</strong> 예약 시 등록된 인원 외에 외부인의 무단 방문 및 숙박은 절대 불가합니다.</p>
@@ -1500,15 +1741,20 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
         </div>
 
         {/* Accordion Item 2: 사계절 온수 인피니티 풀 가이드 */}
-        <div className="bg-[#F7F5F0] border border-[#E3DED4] rounded-xl overflow-hidden transition-all duration-300">
+        <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+          openAccordions['pool'] 
+            ? 'bg-white border-[#84654D] shadow-sm ring-1 ring-[#84654D]/20' 
+            : 'bg-[#F7F5F0] border-[#E3DED4] hover:border-[#84654D]/40 hover:bg-white/60'
+        }`}>
           <button
             type="button"
             onClick={() => toggleAccordion('pool')}
-            className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-white/60 transition-colors group"
+            className="w-full p-4 sm:p-5 md:p-6 text-left flex items-center justify-between gap-3 sm:gap-4 cursor-pointer transition-colors group"
           >
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-full bg-[#7B6248]/10 text-[#7B6248] font-cormorant font-bold text-sm flex items-center justify-center">02</span>
-              <div>
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#84654D]/10 text-[#84654D] font-cormorant font-bold text-sm flex items-center justify-center border border-[#84654D]/20 shrink-0 group-hover:bg-[#84654D] group-hover:text-white transition-colors shadow-2xs">02</span>
+              {/* Desktop Title & Subtitle */}
+              <div className="hidden md:block">
                 <h5 className="text-base font-serif font-medium text-deep-ink">
                   {language === 'en' ? 'Four-Season Heated Pool Guidelines' : '사계절 온수 인피니티 풀 이용 안내'}
                 </h5>
@@ -1516,13 +1762,22 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                   {language === 'en' ? 'Automated water heating, attire guidelines, and safety rules' : '수온 유지 시스템, 복장 규정, 안전 수칙'}
                 </p>
               </div>
+              {/* Mobile Concise Single-Line Core Design */}
+              <div className="md:hidden flex items-center gap-2 flex-wrap min-w-0">
+                <span className="text-[13.5px] font-serif font-medium text-deep-ink tracking-tight">
+                  {language === 'en' ? 'Heated Pool Guide' : '사계절 온수 풀 가이드'}
+                </span>
+                <span className="inline-flex items-center text-[10.5px] font-sans font-medium text-[#84654D] bg-[#84654D]/10 px-2 py-0.5 rounded-full border border-[#84654D]/20 shrink-0">
+                  {language === 'en' ? '32~34°C · Swimwear' : '32~34℃ 온수 · 수영복 착용'}
+                </span>
+              </div>
             </div>
-            <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
+            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center transition-all duration-300 shrink-0 ${
               openAccordions['pool'] 
                 ? 'rotate-180 bg-[#84654D] text-white border-[#84654D]' 
                 : 'bg-white text-[#7B6248]/60 border-[#E3DED4] group-hover:border-[#84654D] group-hover:text-[#84654D] group-hover:bg-[#84654D]/10'
             }`}>
-              <ChevronDown size={16} />
+              <ChevronDown size={15} />
             </div>
           </button>
 
@@ -1536,17 +1791,10 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                 className="overflow-hidden"
               >
                 <div className="px-6 pb-6 pt-2 border-t border-[#E3DED4] space-y-4">
-                  <div className="bg-white border border-[#7B6248]/30 p-5 rounded-lg">
-                    <span className="text-[12px] uppercase font-cormorant tracking-wider text-[#7B6248] font-bold">WATER TEMPERATURE</span>
-                    <h4 className="text-lg font-serif text-deep-ink font-medium">
-                      {language === 'en' ? 'Maintained automatically at 32°C ~ 34°C' : '상시 32°C ~ 34°C 자동 온수 유지'}
-                    </h4>
-                    <p className="text-[12px] text-deep-ink/70 mt-1">
-                      {language === 'en' ? 'Optimal warm water maintained automatically across all four seasons.' : '사계절 내내 쾌적하고 따뜻한 온수풀 온도가 자동 유지됩니다.'}
+                  <div className="bg-[#F7F5F0] border border-[#E3DED4] p-5 rounded-lg space-y-2.5 text-[13px] text-deep-ink/80 leading-relaxed font-serif">
+                    <p className="font-normal text-deep-ink/80">
+                      &middot; <strong>{language === 'en' ? 'Pool Temperature:' : '온수풀 온도:'}</strong> {language === 'en' ? 'Maintained automatically at 32°C ~ 34°C' : ' 상시 32°C ~ 34°C 자동 온수 유지'}
                     </p>
-                  </div>
-
-                  <div className="bg-white border border-[#E3DED4] p-5 rounded-lg space-y-2.5 text-[13px] text-deep-ink/80 leading-relaxed font-serif">
                     {language === 'en' ? (
                       <>
                         <p>&middot; <strong>Swimwear Required:</strong> Please wear proper swimwear or rashguards for hygiene maintenance.</p>
@@ -1557,7 +1805,7 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                     ) : (
                       <>
                         <p>&middot; <strong>수영복 착용:</strong> 수질 관리를 위해 반드시 수영복 또는 래시가드를 착용해 주십시오.</p>
-                        <p>&middot; <strong>미끄럼 주의:</strong> 물기로 인해 풀사이드 주변이 미끄러울 수 있으니 뛰거나 다이빙을 삼가 주십시오.</p>
+                        <p>&middot; <strong>미끄럼 주의:</strong> 물기로 인해 풀사이드 주변이 미끄러울 수 있으니 뛰거나 다이빙을 삼가주세요.</p>
                         <p>&middot; <strong>음주 입수 제한:</strong> 안전 사고 예방을 위해 음주 후 수영장 입장은 엄격히 제한됩니다.</p>
                         <p>&middot; <strong>타월 및 가운:</strong> 풀사이드 전용 최고급 바스타월과 순면 가운이 비치되어 있습니다.</p>
                       </>
@@ -1570,15 +1818,20 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
         </div>
 
         {/* Accordion Item 3: 무료 포함 어메니티 & 혜택 */}
-        <div className="bg-[#F7F5F0] border border-[#E3DED4] rounded-xl overflow-hidden transition-all duration-300">
+        <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+          openAccordions['amenities'] 
+            ? 'bg-white border-[#84654D] shadow-sm ring-1 ring-[#84654D]/20' 
+            : 'bg-[#F7F5F0] border-[#E3DED4] hover:border-[#84654D]/40 hover:bg-white/60'
+        }`}>
           <button
             type="button"
             onClick={() => toggleAccordion('amenities')}
-            className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-white/60 transition-colors group"
+            className="w-full p-4 sm:p-5 md:p-6 text-left flex items-center justify-between gap-3 sm:gap-4 cursor-pointer transition-colors group"
           >
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-full bg-[#7B6248]/10 text-[#7B6248] font-cormorant font-bold text-sm flex items-center justify-center">03</span>
-              <div>
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#84654D]/10 text-[#84654D] font-cormorant font-bold text-sm flex items-center justify-center border border-[#84654D]/20 shrink-0 group-hover:bg-[#84654D] group-hover:text-white transition-colors shadow-2xs">03</span>
+              {/* Desktop Title & Subtitle */}
+              <div className="hidden md:block">
                 <h5 className="text-base font-serif font-medium text-deep-ink">
                   {language === 'en' ? 'Complimentary Amenities & Welcome Perks' : '전관 무료 포함 어메니티 & 웰컴 혜택'}
                 </h5>
@@ -1586,13 +1839,22 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                   {language === 'en' ? 'Tea ceremony set, Aesop bodycare, LP turntable, Dyson hair care' : '다도 다구 세트, Aesop 바디케어, LP 턴테이블, 다이슨 드라이어'}
                 </p>
               </div>
+              {/* Mobile Concise Single-Line Core Design */}
+              <div className="md:hidden flex items-center gap-2 flex-wrap min-w-0">
+                <span className="text-[13.5px] font-serif font-medium text-deep-ink tracking-tight">
+                  {language === 'en' ? 'Free Amenities & Perks' : '무료 어메니티 & 혜택'}
+                </span>
+                <span className="inline-flex items-center text-[10.5px] font-sans font-medium text-[#84654D] bg-[#84654D]/10 px-2 py-0.5 rounded-full border border-[#84654D]/20 shrink-0">
+                  {language === 'en' ? 'Tea · Aesop · Dyson' : '다도 · 이솝 · 턴테이블 · 다이슨'}
+                </span>
+              </div>
             </div>
-            <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
+            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center transition-all duration-300 shrink-0 ${
               openAccordions['amenities'] 
                 ? 'rotate-180 bg-[#84654D] text-white border-[#84654D]' 
                 : 'bg-white text-[#7B6248]/60 border-[#E3DED4] group-hover:border-[#84654D] group-hover:text-[#84654D] group-hover:bg-[#84654D]/10'
             }`}>
-              <ChevronDown size={16} />
+              <ChevronDown size={15} />
             </div>
           </button>
 
@@ -1607,7 +1869,7 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
               >
                 <div className="px-6 pb-6 pt-2 border-t border-[#E3DED4] space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 bg-white border border-[#E3DED4] rounded-lg space-y-1">
+                    <div className="p-4 bg-[#F7F5F0] border border-[#E3DED4] rounded-lg space-y-1">
                       <h5 className="text-sm font-serif font-semibold text-deep-ink">
                         {language === 'en' ? 'Welcome & Tea Therapy' : '웰컴 & 티 테라피'}
                       </h5>
@@ -1615,7 +1877,7 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                         {language === 'en' ? '3 handcrafted welcome tea blends & tea set, local Gangneung desserts, illy espresso machine' : '수제 웰컴 티 3종 및 다도 다구 세트, 강릉 로컬 디저트 다과, 일리 캡슐 커피 머신'}
                       </p>
                     </div>
-                    <div className="p-4 bg-white border border-[#E3DED4] rounded-lg space-y-1">
+                    <div className="p-4 bg-[#F7F5F0] border border-[#E3DED4] rounded-lg space-y-1">
                       <h5 className="text-sm font-serif font-semibold text-deep-ink">
                         {language === 'en' ? 'Bedroom & Bath Amenities' : '침실 & 욕실 어메니티'}
                       </h5>
@@ -1623,7 +1885,7 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                         {language === 'en' ? 'Goose-down bedding & 100% cotton linens, Aesop premium body & haircare, Dyson Airwrap' : '호텔식 거위털 침구류 및 100% 순면 린넨, 이솝(Aesop) 프리미엄 바디 & 헤어 케어 세트, 다이슨 에어랩'}
                       </p>
                     </div>
-                    <div className="p-4 bg-white border border-[#E3DED4] rounded-lg space-y-1">
+                    <div className="p-4 bg-[#F7F5F0] border border-[#E3DED4] rounded-lg space-y-1">
                       <h5 className="text-sm font-serif font-semibold text-deep-ink">
                         {language === 'en' ? 'Sound & Entertainment' : '사운드 & 엔터테인먼트'}
                       </h5>
@@ -1631,7 +1893,7 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                         {language === 'en' ? 'Audio-Technica vinyl turntable & curated LP records, B&O speaker, beam projector' : '오디오테크니카 LP 턴테이블 & 큐레이션 바이닐 앨범, 뱅앤올룹슨 스피커, 빔프로젝터'}
                       </p>
                     </div>
-                    <div className="p-4 bg-white border border-[#E3DED4] rounded-lg space-y-1">
+                    <div className="p-4 bg-[#F7F5F0] border border-[#E3DED4] rounded-lg space-y-1">
                       <h5 className="text-sm font-serif font-semibold text-deep-ink">
                         {language === 'en' ? 'Kitchen & Dining' : '주방 & 다이닝'}
                       </h5>
@@ -1647,15 +1909,20 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
         </div>
 
         {/* Accordion Item 4: 취소 및 환불 규정 */}
-        <div className="bg-[#F7F5F0] border border-[#E3DED4] rounded-xl overflow-hidden transition-all duration-300">
+        <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+          openAccordions['refund'] 
+            ? 'bg-white border-[#84654D] shadow-sm ring-1 ring-[#84654D]/20' 
+            : 'bg-[#F7F5F0] border-[#E3DED4] hover:border-[#84654D]/40 hover:bg-white/60'
+        }`}>
           <button
             type="button"
             onClick={() => toggleAccordion('refund')}
-            className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-white/60 transition-colors group"
+            className="w-full p-4 sm:p-5 md:p-6 text-left flex items-center justify-between gap-3 sm:gap-4 cursor-pointer transition-colors group"
           >
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-full bg-[#7B6248]/10 text-[#7B6248] font-cormorant font-bold text-sm flex items-center justify-center">04</span>
-              <div>
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#84654D]/10 text-[#84654D] font-cormorant font-bold text-sm flex items-center justify-center border border-[#84654D]/20 shrink-0 group-hover:bg-[#84654D] group-hover:text-white transition-colors shadow-2xs">04</span>
+              {/* Desktop Title & Subtitle */}
+              <div className="hidden md:block">
                 <h5 className="text-base font-serif font-medium text-deep-ink">
                   {language === 'en' ? 'Cancellation Fees & Refund Policy' : '취소 수수료 및 환불 규정'}
                 </h5>
@@ -1663,13 +1930,22 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                   {language === 'en' ? 'Refund percentages categorized by days prior to check-in' : '이용 예정일 기준 일자별 환불 비율 안내'}
                 </p>
               </div>
+              {/* Mobile Concise Single-Line Core Design */}
+              <div className="md:hidden flex items-center gap-2 flex-wrap min-w-0">
+                <span className="text-[13.5px] font-serif font-medium text-deep-ink tracking-tight">
+                  {language === 'en' ? 'Cancellation & Refund' : '취소 수수료 & 환불 규정'}
+                </span>
+                <span className="inline-flex items-center text-[10.5px] font-sans font-medium text-[#84654D] bg-[#84654D]/10 px-2 py-0.5 rounded-full border border-[#84654D]/20 shrink-0">
+                  {language === 'en' ? '10d 100% ~ 3d 50%' : '10일 전 100% ~ 3일 전 50%'}
+                </span>
+              </div>
             </div>
-            <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
+            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center transition-all duration-300 shrink-0 ${
               openAccordions['refund'] 
                 ? 'rotate-180 bg-[#84654D] text-white border-[#84654D]' 
                 : 'bg-white text-[#7B6248]/60 border-[#E3DED4] group-hover:border-[#84654D] group-hover:text-[#84654D] group-hover:bg-[#84654D]/10'
             }`}>
-              <ChevronDown size={16} />
+              <ChevronDown size={15} />
             </div>
           </button>
 
@@ -1683,29 +1959,65 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
                 className="overflow-hidden"
               >
                 <div className="px-6 pb-6 pt-2 border-t border-[#E3DED4] space-y-4">
-                  <div className="bg-white border border-[#E3DED4] rounded-lg overflow-hidden text-[13px]">
+                  <div className="bg-[#F7F5F0] border border-[#E3DED4] rounded-lg overflow-hidden text-[13px]">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="bg-deep-ink/5 border-b border-[#E3DED4]">
+                        <tr className="bg-[#EDE8DE]/80 border-b border-[#E3DED4]">
                           <th className="p-3.5 font-semibold text-deep-ink/80">{language === 'en' ? 'Cancellation Timing' : '예약 취소 시점'}</th>
-                          <th className="p-3.5 font-semibold text-deep-ink/80 text-right">{language === 'en' ? 'Refund Ratio' : '환불 금액 비율'}</th>
+                          <th className="p-3.5 font-semibold text-deep-ink/80 text-right">
+                            {language === 'en' ? 'Refund Ratio' : (
+                              <>
+                                환불 <span className="hidden md:inline">금액 </span>비율
+                              </>
+                            )}
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-[#E3DED4] text-deep-ink/75">
                         <tr>
-                          <td className="p-3.5">{language === 'en' ? 'Up to 10 days before check-in' : '이용 예정일 10일 전까지'}</td>
-                          <td className="p-3.5 font-semibold text-[#7B6248] text-right">{language === 'en' ? '100% Full Refund' : '100% 전액 환불'}</td>
+                          <td className="p-3.5">
+                            {language === 'en' ? 'Up to 10 days before check-in' : (
+                              <>
+                                이용 예정일 10일 전<span className="hidden md:inline">까지</span>
+                              </>
+                            )}
+                          </td>
+                          <td className="p-3.5 font-semibold text-[#7B6248] text-right">
+                            {language === 'en' ? '100% Full Refund' : (
+                              <>
+                                <span className="hidden md:inline">100% </span>전액 환불
+                              </>
+                            )}
+                          </td>
                         </tr>
                         <tr>
-                          <td className="p-3.5">{language === 'en' ? 'Up to 7 days before check-in' : '이용 예정일 7일 전까지'}</td>
+                          <td className="p-3.5">
+                            {language === 'en' ? 'Up to 7 days before check-in' : (
+                              <>
+                                이용 예정일 7일 전<span className="hidden md:inline">까지</span>
+                              </>
+                            )}
+                          </td>
                           <td className="p-3.5 text-right">{language === 'en' ? '90% Refund' : '90% 환불'}</td>
                         </tr>
                         <tr>
-                          <td className="p-3.5">{language === 'en' ? 'Up to 5 days before check-in' : '이용 예정일 5일 전까지'}</td>
+                          <td className="p-3.5">
+                            {language === 'en' ? 'Up to 5 days before check-in' : (
+                              <>
+                                이용 예정일 5일 전<span className="hidden md:inline">까지</span>
+                              </>
+                            )}
+                          </td>
                           <td className="p-3.5 text-right">{language === 'en' ? '70% Refund' : '70% 환불'}</td>
                         </tr>
                         <tr>
-                          <td className="p-3.5">{language === 'en' ? 'Up to 3 days before check-in' : '이용 예정일 3일 전까지'}</td>
+                          <td className="p-3.5">
+                            {language === 'en' ? 'Up to 3 days before check-in' : (
+                              <>
+                                이용 예정일 3일 전<span className="hidden md:inline">까지</span>
+                              </>
+                            )}
+                          </td>
                           <td className="p-3.5 text-right">{language === 'en' ? '50% Refund' : '50% 환불'}</td>
                         </tr>
                         <tr>
@@ -1722,50 +2034,26 @@ const BookingForm = ({ language = 'ko' }: { language?: Language }) => {
         </div>
       </div>
 
-      {/* Distinct Warm Tone Naver Booking Partner Section */}
-      <div className="bg-[#EDE7DC] border border-[#DDD6C8] rounded-2xl p-6 md:p-8 space-y-6 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#DDD6C8]">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-sans font-semibold text-[#7B6248] uppercase tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-[#7B6248]" />
-              <span>{language === 'en' ? 'Naver Booking Partner' : '네이버 예약 파트너'}</span>
-            </div>
-            <h4 className="text-lg md:text-xl font-serif text-deep-ink font-medium">
-              {language === 'en' ? 'Real-Time Online Reservation' : '실시간 예약 진행'}
-            </h4>
-            <p className="text-[12px] text-deep-ink/65 font-serif font-light leading-relaxed max-w-lg">
-              {language === 'en' 
-                ? 'Check real-time calendar availability and instant confirmations directly via Naver Booking.'
-                : '네이버 예약을 통해 실시간 잔여 객실 조회 및 즉시 예약 확정이 가능합니다.'}
-            </p>
-          </div>
+      {/* Naver Booking Partner Section - card box removed */}
+      <div className="flex flex-col items-center justify-center text-center space-y-3.5 pt-6 pb-2">
+        <button
+          type="button"
+          onClick={handleNaverBooking}
+          className="w-full sm:w-auto px-10 py-4 bg-[#7B6248] hover:bg-[#634E39] text-white text-sm tracking-wider uppercase font-semibold transition-all duration-300 rounded-xl shadow-sm border border-[#7B6248] cursor-pointer inline-flex items-center justify-center gap-2 font-sans"
+        >
+          <span>{language === 'en' ? 'Book with Naver' : '네이버 예약 바로가기'}</span>
+          <ArrowRight size={16} />
+        </button>
 
-          <button
-            type="button"
-            onClick={handleNaverBooking}
-            className="shrink-0 px-7 py-3.5 bg-[#7B6248] hover:bg-[#634E39] text-white text-[13px] tracking-wider uppercase font-semibold transition-all duration-300 rounded-xl shadow-xs border border-[#7B6248] cursor-pointer inline-flex items-center justify-center gap-2 font-sans"
-          >
-            <span>{language === 'en' ? 'Book with Naver' : '네이버 예약 바로가기'}</span>
-            <ArrowRight size={15} />
-          </button>
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[12px] text-deep-ink/75 font-sans leading-relaxed">
-          <span>
-            {language === 'en' ? (
-              <>
-                Yunseul Stay: <strong className="font-semibold text-deep-ink">1544-0634</strong> (<span className="font-medium text-deep-ink">Daily 09:00 - 20:00</span>) · KakaoTalk: <strong className="font-semibold text-deep-ink">@yunseul_stay</strong>
-              </>
-            ) : (
-              <>
-                윤슬 스테이 문의: <strong className="font-semibold text-deep-ink">1544-0634</strong> (<span className="font-medium text-deep-ink">연중무휴 09:00 - 20:00</span>) · 카카오톡 채널: <strong className="font-semibold text-deep-ink">@윤슬스테이</strong>
-              </>
-            )}
-          </span>
-          <span className="text-[11px] text-deep-ink/40 font-serif">
-            {language === 'en' ? '* By booking, you agree to all house rules.' : '* 예약 시 이용 수칙 및 환불 규정에 동의한 것으로 간주됩니다.'}
-          </span>
-        </div>
+        <p className="text-[12px] text-deep-ink/50 font-serif text-center pb-8 md:pb-0">
+          {language === 'en' ? (
+            '* By booking, you agree to all house rules.'
+          ) : (
+            <>
+              * 예약 시 이용 수칙 및 환불 규정에 <br className="md:hidden" />동의한 것으로 간주됩니다.
+            </>
+          )}
+        </p>
       </div>
     </div>
   );
@@ -1785,7 +2073,7 @@ const RoomZoneItem: React.FC<RoomZoneItemProps> = ({ room, index, language = 'ko
   return (
     <section 
       id={room.id}
-      className={`${sectionBg} py-20 md:py-28 border-b border-[#E3DED4] scroll-mt-24`}
+      className={`${sectionBg} py-20 md:py-28 md:max-lg:py-16 border-b border-[#E3DED4] scroll-mt-24`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <motion.div 
@@ -1804,7 +2092,7 @@ const RoomZoneItem: React.FC<RoomZoneItemProps> = ({ room, index, language = 'ko
                 className={`w-full h-full object-cover ${index % 2 === 0 ? 'natural-motion-img' : 'natural-motion-img-alt'}`} 
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute top-4 left-4 z-10">
+              <div className="absolute top-4 left-4 z-10 hidden md:block">
                 <span className="px-3.5 py-1.5 bg-black/50 backdrop-blur-md text-white text-[11px] font-serif font-light rounded-full border border-white/20 uppercase tracking-wider">
                   {index === 0 && (language === 'en' ? 'Garden View & Tea Lounge' : '가든 뷰 & 다도 라운지')}
                   {index === 1 && (language === 'en' ? 'Four-Season Private Heated Pool' : '사계절 프라이빗 온수풀')}
@@ -1823,7 +2111,7 @@ const RoomZoneItem: React.FC<RoomZoneItemProps> = ({ room, index, language = 'ko
                   EXCLUSIVE SPACE 0{index + 1}
                 </span>
               </div>
-              <h2 className="text-2xl md:text-[30px] font-serif leading-tight text-deep-ink uppercase tracking-wide">
+              <h2 className="text-2xl md:text-[28px] font-serif leading-tight text-deep-ink uppercase tracking-wide">
                 {language === 'en' ? (room.nameEn || room.name) : (room.nameKo || room.name)}
               </h2>
             </div>
@@ -1884,11 +2172,11 @@ const RoomZoneItem: React.FC<RoomZoneItemProps> = ({ room, index, language = 'ko
 
               <div className="text-[13px] text-deep-ink/75 font-serif font-light min-h-[70px]">
                 {activeTab === 'features' && (
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  <div className="flex flex-col md:flex-row md:flex-wrap gap-1.5 pt-1">
                     {(language === 'en' && room.featuresEn ? room.featuresEn : room.features).map((feat, fIdx) => (
                       <span 
                         key={fIdx} 
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E3DED4] text-[11px] text-[#84654D] font-sans font-medium transition-all duration-300 hover:-translate-y-1 hover:shadow-xs cursor-default"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E3DED4] text-[11px] text-[#84654D] font-sans font-medium transition-all duration-300 hover:-translate-y-1 hover:shadow-xs cursor-default w-full md:w-auto"
                       >
                         <Check size={11} className="shrink-0" /> 
                         <span>{feat}</span>
@@ -1976,13 +2264,17 @@ const RoomsPage = ({
             <span className="text-[14px] uppercase tracking-wider text-[#84654D] font-cormorant font-bold block">
               STAY GUIDELINES
             </span>
-            <h3 className="text-2xl md:text-3xl font-serif text-deep-ink font-light">
+            <h3 className="text-[24px] md:text-[28px] font-serif text-deep-ink font-light">
               {language === 'en' ? 'Stay Guidelines' : '숙박 및 이용 안내'}
             </h3>
             <p className="text-[13px] text-deep-ink/70 font-serif leading-relaxed font-light">
               {language === 'en'
                 ? 'Curated house rules and stay policies designed to guarantee undisturbed tranquility and supreme cleanliness for all guests.'
-                : '모든 고객의 온전하고 평화로운 휴식을 위해 정성스럽게 마련된 이용 가이드입니다.'}
+                : (
+                  <>
+                    모든 고객의 온전하고 평화로운 휴식을 위해 <br className="md:hidden" />정성스럽게 마련된 이용 가이드입니다.
+                  </>
+                )}
             </p>
             <div className="w-12 h-px bg-[#84654D] mt-2" />
           </div>
@@ -2028,14 +2320,14 @@ const RoomsPage = ({
                   <>
                     <li>• <strong>Standard 2 / Max 8 guests (Entire Estate)</strong></li>
                     <li>• <strong>Extra guest</strong>: ₩30,000 / night</li>
-                    <li>• (Includes luxury bedding & Aesop amenities)</li>
+                    <li>• Includes luxury bedding & Aesop amenities</li>
                     <li>• All ages counted in total occupancy</li>
                   </>
                 ) : (
                   <>
                     <li>• <strong>기준 2인 / 최대 8인 독채 전관</strong></li>
                     <li>• <strong>초과 요금</strong>: 1인 1박 30,000원</li>
-                    <li>• (최고급 침구류 &amp; 어메니티 일체 포함)</li>
+                    <li>• 최고급 침구류 &amp; 어메니티 일체 포함</li>
                     <li>• 영유아 포함 전 연령 인원수에 산정</li>
                   </>
                 )}
@@ -2097,31 +2389,52 @@ const RoomsPage = ({
             </div>
           </div>
 
-          <div className="p-5 rounded-xl bg-[#F7F5F0] border border-[#E3DED4] flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left hover:-translate-y-1 hover:shadow-md transition-all duration-300">
-            <div className="space-y-0.5">
-              <p className="text-[13px] font-serif text-deep-ink font-medium">
-                {language === 'en' ? 'Have questions regarding your stay or rooms?' : '객실 관련 추가 문의가 필요하신가요?'}
-              </p>
-              <p className="text-[12px] text-deep-ink/75 font-sans leading-relaxed">
-                {language === 'en' ? (
+          <div className="hidden lg:flex p-6 md:p-7 rounded-2xl bg-[#F7F5F0] border border-[#E3DED4] flex-col lg:flex-row items-center justify-between gap-6 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+            <div className="space-y-2 w-full text-center lg:text-left">
+              <p className="text-[16px] md:text-[17px] font-serif text-deep-ink font-semibold leading-relaxed">
+                {language === 'en' ? 'Have questions regarding your stay or rooms?' : (
                   <>
-                    Yunseul Stay Desk: <strong className="font-semibold text-deep-ink">1544-0634</strong> (<span className="font-medium text-deep-ink">Daily 09:00 - 20:00</span>) · KakaoTalk: <strong className="font-semibold text-deep-ink">@yunseul_stay</strong>
-                  </>
-                ) : (
-                  <>
-                    윤슬 스테이 문의: <strong className="font-semibold text-deep-ink">1544-0634</strong> (<span className="font-medium text-deep-ink">연중무휴 09:00 - 20:00</span>) · 카카오톡 채널: <strong className="font-semibold text-deep-ink">@윤슬스테이</strong>
+                    <span className="hidden md:inline lg:hidden">객실 관련 추가 문의</span>
+                    <span className="inline md:hidden lg:inline">객실 관련 추가 문의가 필요하신가요?</span>
                   </>
                 )}
               </p>
+              <div className="text-[13px] text-deep-ink/75 font-sans leading-relaxed space-y-1 md:space-y-0 lg:flex lg:items-center lg:gap-4 lg:justify-start">
+                <p>
+                  {language === 'en' ? (
+                    <>
+                      <strong className="font-semibold text-deep-ink">Yunseul Stay Desk:</strong> 1544-0634
+                      <span className="hidden lg:inline text-deep-ink/75"> (Daily 09:00 - 20:00)</span>
+                    </>
+                  ) : (
+                    <>
+                      <strong className="font-semibold text-deep-ink">윤슬 스테이 문의:</strong> 1544-0634
+                      <span className="hidden lg:inline text-deep-ink/75"> (연중무휴 09:00 - 20:00)</span>
+                    </>
+                  )}
+                </p>
+                <p>
+                  {language === 'en' ? (
+                    <>
+                      <strong className="font-semibold text-deep-ink">KakaoTalk:</strong> @yunseul_stay
+                    </>
+                  ) : (
+                    <>
+                      <strong className="font-semibold text-deep-ink">카카오톡 채널:</strong> @윤슬스테이
+                    </>
+                  )}
+                </p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5 justify-center lg:justify-end shrink-0 w-full lg:w-auto pt-4 lg:pt-0">
               <a
-                href="https://open.kakao.com"
+                href="https://pf.kakao.com/_fhxirX"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2.5 bg-[#84654D]/10 hover:bg-[#84654D]/20 text-[#84654D] border border-[#84654D]/30 text-[12px] font-sans font-semibold rounded-lg shadow-2xs transition-colors cursor-pointer inline-flex items-center gap-1.5 shrink-0"
+                className="group px-4.5 py-2.5 bg-[#84654D]/10 hover:bg-[#84654D]/20 text-[#84654D] border border-[#84654D]/30 text-[12px] font-sans font-semibold rounded-lg shadow-2xs transition-colors cursor-pointer inline-flex items-center gap-1.5 shrink-0"
               >
                 <span>카톡 문의하기</span>
+                <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
               </a>
               <button
                 type="button"
@@ -2129,9 +2442,10 @@ const RoomsPage = ({
                   window.scrollTo({ top: 0, behavior: 'instant' });
                   onNavigate('booking');
                 }}
-                className="px-5 py-2.5 bg-[#84654D] text-white hover:bg-[#6E533D] text-[12px] font-sans font-semibold rounded-lg shadow-sm transition-colors cursor-pointer inline-flex items-center gap-1.5 shrink-0"
+                className="group px-5 py-2.5 bg-[#84654D] text-white hover:bg-[#6E533D] text-[12px] font-sans font-semibold rounded-lg shadow-sm transition-colors cursor-pointer inline-flex items-center gap-1.5 shrink-0"
               >
-                {language === 'en' ? 'Book Reservation' : '실시간 예약하기'} <ArrowRight size={12} />
+                <span>{language === 'en' ? 'Book Reservation' : '실시간 예약하기'}</span>
+                <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
               </button>
             </div>
           </div>
@@ -2150,7 +2464,7 @@ const BookingPage = ({ language = 'ko' }: { language?: Language }) => {
         subtitle="Booking Room" 
         image="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=1920&q=80"
       />
-      <section className="pt-16 md:pt-24 pb-20 md:pb-28 px-6 md:px-16 lg:px-24 bg-[#F7F5F0]">
+      <section className="pt-16 md:pt-24 pb-6 md:pb-10 lg:pb-28 md:max-lg:pt-14 px-6 md:px-16 lg:px-24 bg-[#F7F5F0]">
         <div className="max-w-4xl mx-auto">
           <BookingForm language={language} />
         </div>
@@ -2172,11 +2486,11 @@ const SpecialPage = ({ language = 'ko' }: { language?: Language }) => {
       />
       
       {/* Section 01: Signature Programs Grid */}
-      <section className="py-24 md:py-28 bg-[#F7F5F0] border-b border-[#E3DED4]">
+      <section className="py-24 md:py-28 md:max-lg:py-16 bg-[#F7F5F0] border-b border-[#E3DED4]">
         <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-16">
           <div className="text-center space-y-3 flex flex-col items-center justify-center">
             <span className="text-[15px] uppercase tracking-wider text-[#7B6248] font-cormorant font-bold block">SIGNATURE PROGRAMS</span>
-            <h2 className="text-2xl md:text-3xl font-serif leading-tight text-deep-ink uppercase tracking-wide font-light">
+            <h2 className="text-[24px] md:text-[28px] font-serif leading-tight text-deep-ink uppercase tracking-wide font-light">
               {language === 'en' ? 'Yunseul Stay Signature Experiences' : '윤슬 스테이 시그니처 체험'}
             </h2>
             <div className="w-12 h-px bg-[#7B6248] mt-3" />
@@ -2199,7 +2513,7 @@ const SpecialPage = ({ language = 'ko' }: { language?: Language }) => {
                       src={special.image} 
                       alt={language === 'en' ? special.titleEn || special.title : special.titleKo || special.title} 
                       className={`w-full h-full object-cover ${idx % 2 === 0 ? 'natural-motion-img' : 'natural-motion-img-alt'}`} 
-                      referrerPolicy="no-referrer"
+                      referrerPolicy="no-referrer" 
                     />
                     <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-500" />
                   </div>
@@ -2230,7 +2544,7 @@ const SpecialPage = ({ language = 'ko' }: { language?: Language }) => {
               className="space-y-6"
             >
               <span className="text-[15px] uppercase tracking-wider text-[#7B6248] font-cormorant font-bold block">SEASONAL RITUAL</span>
-              <h3 className="text-xl md:text-3xl font-serif font-light text-deep-ink">
+              <h3 className="text-[24px] md:text-[28px] font-serif font-light text-deep-ink">
                 {language === 'en' ? 'Seasonal Welcome Plate' : '계절을 담은 웰컴 플레이트'}
               </h3>
               <p className="text-[13px] md:text-sm text-deep-ink/70 font-serif leading-relaxed font-light">
@@ -2302,7 +2616,7 @@ const SpecialPage = ({ language = 'ko' }: { language?: Language }) => {
               <div className="w-full md:w-[65%] p-8 md:p-12 space-y-6 overflow-y-auto">
                 <div className="space-y-2">
                   <span className="text-[15px] tracking-wider text-[#7B6248] uppercase font-cormorant font-bold block">Season Beverage</span>
-                  <h3 className="text-2xl md:text-[30px] font-serif leading-tight text-deep-ink">
+                  <h3 className="text-2xl md:text-[28px] font-serif leading-tight text-deep-ink">
                     {language === 'en' ? 'Seasonal Signature Drinks' : '계절의 시그니처 음료'}
                   </h3>
                 </div>
@@ -2446,7 +2760,7 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
       />
       
       {/* Section 01: Modern Location & Address Section */}
-      <section className="py-20 md:py-28 bg-[#F7F5F0]">
+      <section className="py-20 md:py-28 md:max-lg:py-16 bg-[#F7F5F0]">
         <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-16">
           
           {/* Header */}
@@ -2454,13 +2768,17 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
             <span className="text-[13px] uppercase tracking-wider text-[#84654D] font-cormorant font-bold block">
               LOCATION &amp; ADDRESS
             </span>
-            <h2 className="text-2xl md:text-3xl font-serif text-deep-ink font-light leading-tight">
+            <h2 className="text-[24px] md:text-[28px] font-serif text-deep-ink font-light leading-tight">
               {language === 'en' ? 'Directions & Stay Location' : '오시는 길 & 위치 안내'}
             </h2>
             <p className="text-[13px] text-deep-ink/65 font-serif font-light leading-relaxed">
               {language === 'en'
                 ? "Located along Korea's closest coastal roadway, Heonhwa-ro, overlooking the East Sea."
-                : "바다와 가장 가까운 해안도로 헌화로 바로 앞, 동해를 마주하는 프라이빗 안식처입니다."}
+                : (
+                  <>
+                    바다와 가장 가까운 해안도로 헌화로 바로 앞, <br className="md:hidden" />동해를 마주하는 프라이빗 안식처입니다.
+                  </>
+                )}
             </p>
             <div className="w-12 h-px bg-[#84654D] mt-2" />
           </div>
@@ -2497,7 +2815,7 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
                   </motion.div>
                 </div>
 
-                <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md px-4 py-3 rounded-xl border border-[#E3DED4] flex items-center justify-between shadow-sm">
+                <div className="hidden lg:flex absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md px-4 py-3 rounded-xl border border-[#E3DED4] items-center justify-between shadow-sm">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#84654D] animate-pulse" />
                     <span className="text-xs font-serif font-medium text-deep-ink">
@@ -2516,14 +2834,17 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
               transition={{ delay: 0.1, duration: 0.8 }}
               className="lg:col-span-5 flex flex-col justify-between bg-white border border-[#E3DED4] p-7 md:p-9 rounded-3xl shadow-sm space-y-6"
             >
-              <div className="space-y-5">
+              <div className="space-y-4">
                 <div className="space-y-1">
-                  <span className="text-[11px] font-sans font-bold text-[#84654D] uppercase tracking-wider block">
-                    {language === 'en' ? 'STAY LOCATION & ADDRESS' : '스테이 위치 및 주소 안내'}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin size={13} className="text-[#84654D] shrink-0" />
+                    <span className="text-[11px] font-sans font-bold text-[#84654D] uppercase tracking-wider block">
+                      {language === 'en' ? 'STAY LOCATION & ADDRESS' : '스테이 위치 및 주소 안내'}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="p-5 bg-[#F7F5F0] rounded-2xl border border-[#E3DED4] space-y-3">
+                <div className="p-4 sm:p-5 bg-[#F7F5F0] rounded-2xl border border-[#E3DED4] space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-sans font-bold text-[#84654D] px-2.5 py-1 bg-[#84654D]/10 rounded-full border border-[#84654D]/20 uppercase tracking-wider">
                       {language === 'en' ? 'Road Name Address' : '도로명 주소'}
@@ -2543,7 +2864,7 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-3 pt-2">
+              <div className="space-y-3 pt-1">
                 <button
                   type="button"
                   onClick={copyAddress}
@@ -2556,7 +2877,7 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
                   {copied ? (
                     <>
                       <Check size={16} className="text-white" />
-                      <span>{language === 'en' ? 'Address copied to clipboard' : '주소가 클립보드에 복사되었습니다'}</span>
+                      <span>{language === 'en' ? 'Address copied to clipboard' : '주소가 복사되었습니다'}</span>
                     </>
                   ) : (
                     <>
@@ -2568,7 +2889,7 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
 
                 <div className="grid grid-cols-2 gap-3">
                   <a 
-                    href="https://map.naver.com/v5/search/%EA%B0%95%EC%9B%90%ED%8A%B9%EB%B3%84%EC%9E%90%EC%B9%98%EB%8F%84%20%EA%B0%95%EB%A6%89%EC%8B%9C%20%EC%98%A5%EA%B3%84%EB%A9%B4%20%ED%97%8C%ED%99%94%EB%A1%9C%20456" 
+                    href="https://map.naver.com" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 px-4 py-3 bg-[#84654D] hover:bg-[#6E533D] text-white text-[12px] font-sans font-semibold rounded-xl transition-all text-center cursor-pointer shadow-xs"
@@ -2597,8 +2918,8 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
                 <div className="w-10 h-10 rounded-xl bg-[#F7F5F0] border border-[#E3DED4] flex items-center justify-center text-[#84654D] shrink-0">
                   <Car size={18} />
                 </div>
-                <h4 className="text-[15px] font-serif font-bold text-deep-ink">
-                  {language === 'en' ? 'By Car / Expressway' : '자가용 / 고속도로'}
+                <h4 className="text-[15px] font-serif font-bold text-deep-ink md:max-lg:whitespace-nowrap">
+                  {language === 'en' ? 'By Car' : '자가용 이용'}
                 </h4>
               </div>
               <p className="text-[12.5px] text-deep-ink/75 font-serif leading-relaxed font-light">
@@ -2613,8 +2934,8 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
                 <div className="w-10 h-10 rounded-xl bg-[#F7F5F0] border border-[#E3DED4] flex items-center justify-center text-[#84654D] shrink-0">
                   <Train size={18} />
                 </div>
-                <h4 className="text-[15px] font-serif font-bold text-deep-ink">
-                  {language === 'en' ? 'KTX / Public Transit' : 'KTX 기차 & 대중교통'}
+                <h4 className="text-[15px] font-serif font-bold text-deep-ink md:max-lg:whitespace-nowrap">
+                  {language === 'en' ? 'Public Transit' : '대중교통 이용'}
                 </h4>
               </div>
               <p className="text-[12.5px] text-deep-ink/75 font-serif leading-relaxed font-light">
@@ -2629,8 +2950,8 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
                 <div className="w-10 h-10 rounded-xl bg-[#F7F5F0] border border-[#E3DED4] flex items-center justify-center text-[#84654D] shrink-0">
                   <ShieldCheck size={18} />
                 </div>
-                <h4 className="text-[15px] font-serif font-bold text-deep-ink">
-                  {language === 'en' ? 'Private Parking & Check-in' : '단독 주차 & 비대면 체크인'}
+                <h4 className="text-[15px] font-serif font-bold text-deep-ink md:max-lg:whitespace-nowrap">
+                  {language === 'en' ? 'Check-in' : '비대면 체크인'}
                 </h4>
               </div>
               <p className="text-[12.5px] text-deep-ink/75 font-serif leading-relaxed font-light">
@@ -2645,26 +2966,30 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
       </section>
 
       {/* Section 02: Guest Privileges & Curated Services */}
-      <section className="bg-white border-t border-[#E3DED4] py-16 md:py-24">
+      <section className="bg-white border-t border-[#E3DED4] py-16 md:py-24 md:max-lg:pb-28">
         <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-12">
-          <div className="text-center space-y-2 max-w-xl mx-auto flex flex-col items-center justify-center">
-            <span className="text-[13px] uppercase tracking-wider text-[#84654D] font-cormorant font-bold block">
-              GUEST PRIVILEGES &amp; SERVICES
+          <div className="text-center space-y-2 max-w-xl mx-auto flex flex-col items-center justify-center md:max-lg:items-center">
+            <span className="text-[13px] uppercase tracking-wider text-[#84654D] font-cormorant font-bold block md:max-lg:whitespace-nowrap">
+              GUEST PRIVILEGES
             </span>
-            <h2 className="text-2xl md:text-3xl font-serif leading-tight text-deep-ink font-light">
-              {language === 'en' ? 'Exclusive Privileges for Guests' : '투숙객 전용 시그니처 혜택'}
+            <h2 className="text-[24px] md:text-[28px] font-serif leading-tight text-deep-ink font-light">
+              {language === 'en' ? 'Exclusive Privileges' : '투숙객 전용 혜택'}
             </h2>
             <p className="text-[13px] text-deep-ink/65 font-serif leading-relaxed font-light">
               {language === 'en'
-                ? 'Curated welcome tea refreshments, luggage storage, and corkage-free dining for your rest.'
-                : '웰컴 티와 다과, 무료 짐 보관, 콜키지 프리 다이닝 혜택으로 편안한 쉼을 전합니다.'}
+                ? 'Curated exclusive privileges and amenities for your restful stay.'
+                : (
+                  <>
+                    머무시는 동안 온전한 휴식과 안락함을 <br className="md:hidden" />누리실 수 있는 전용 혜택입니다.
+                  </>
+                )}
             </p>
             <div className="w-12 h-px bg-[#84654D] mt-2" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:max-lg:flex md:max-lg:flex-col md:max-lg:items-center md:max-lg:justify-center">
             {/* Perk 01: Welcome Tea & Local Refreshment */}
-            <div className="p-7 rounded-2xl bg-[#F7F5F0] border border-[#E3DED4] hover:border-[#84654D]/50 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
+            <div className="w-full max-w-xl md:max-lg:max-w-2xl lg:max-w-none p-7 rounded-2xl bg-[#F7F5F0] border border-[#E3DED4] hover:border-[#84654D]/50 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-sans font-bold text-[#84654D] uppercase tracking-wider">
@@ -2692,7 +3017,7 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
             </div>
 
             {/* Perk 02: Early Luggage Locker */}
-            <div className="p-7 rounded-2xl bg-[#F7F5F0] border border-[#E3DED4] hover:border-[#84654D]/50 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
+            <div className="w-full max-w-xl md:max-lg:max-w-2xl lg:max-w-none p-7 rounded-2xl bg-[#F7F5F0] border border-[#E3DED4] hover:border-[#84654D]/50 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-sans font-bold text-[#84654D] uppercase tracking-wider">
@@ -2720,7 +3045,7 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
             </div>
 
             {/* Perk 03: Corkage Free & Gourmet Setup */}
-            <div className="p-7 rounded-2xl bg-[#F7F5F0] border border-[#E3DED4] hover:border-[#84654D]/50 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
+            <div className="w-full max-w-xl md:max-lg:max-w-2xl lg:max-w-none p-7 rounded-2xl bg-[#F7F5F0] border border-[#E3DED4] hover:border-[#84654D]/50 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-sans font-bold text-[#84654D] uppercase tracking-wider">
@@ -2757,39 +3082,51 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
             <span className="text-[13px] uppercase tracking-wider text-[#84654D] font-cormorant font-bold block">
               SCENIC TRAILS &amp; DRIVE
             </span>
-            <h2 className="text-2xl md:text-3xl font-serif leading-tight text-deep-ink font-light">
-              {language === 'en' ? 'Heonhwa-ro Coastal Drive & Scenic Routes' : '헌화로 감성 드라이브 & 해안 산책 코스'}
+            <h2 className="text-[24px] md:text-[28px] font-serif leading-tight text-deep-ink font-light">
+              {language === 'en' ? (
+                'Heonhwa-ro Coastal Drive & Scenic Routes'
+              ) : (
+                <>
+                  <span className="hidden md:inline">헌화로 감성 </span>드라이브 &amp; 해안 산책 코스
+                </>
+              )}
             </h2>
             <p className="text-[13px] text-deep-ink/65 font-serif leading-relaxed font-light">
               {language === 'en'
                 ? "Curated coastal trails and scenic driving routes directly connected to Korea's closest coastal roadway, Heonhwa-ro."
-                : '국내에서 바다와 가장 가까운 해안도로 ‘헌화로’와 이어지는 추천 힐링 코스입니다.'}
+                : (
+                  <>
+                    국내에서 바다와 가장 가까운 해안도로 ‘헌화로’와 <br className="md:hidden" />이어지는 추천 힐링 코스입니다.
+                  </>
+                )}
             </p>
             <div className="w-12 h-px bg-[#84654D] mt-2" />
           </div>
 
           {/* Course Selector Tabs - Clear, scan-friendly layout */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5">
-            {scenicCourses.map((course, idx) => {
-              const isActive = activeScenicIndex === idx;
-              const IconComp = course.icon;
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setActiveScenicIndex(idx)}
-                  className={`px-4 py-2.5 rounded-full text-xs font-serif transition-transform duration-300 flex items-center gap-2 cursor-pointer hover:-translate-y-1 ${
-                    isActive
-                      ? 'bg-[#84654D] text-white shadow-md font-medium'
-                      : 'bg-white text-deep-ink/75 border border-[#E3DED4] shadow-2xs'
-                  }`}
-                >
-                  <IconComp size={13} className={isActive ? 'text-white' : 'text-[#84654D]'} />
-                  <span className="font-sans font-bold text-[11px] opacity-80">{course.step}</span>
-                  <span className="text-inherit">{language === 'en' ? course.titleEn : course.titleKo.split(' ')[0] + ' ' + (course.titleKo.split(' ')[1] || '')}</span>
-                </button>
-              );
-            })}
+          <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center">
+            <div className="w-full flex items-center gap-2.5 overflow-x-auto pb-3 px-4 sm:px-6 lg:justify-center lg:overflow-visible [scrollbar-width:thin] [scrollbar-color:#BFAF9F_#EDE7DF] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-[#EDE7DF] [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#BFAF9F] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-button]:hidden lg:[scrollbar-width:none] lg:[&::-webkit-scrollbar]:hidden">
+              {scenicCourses.map((course, idx) => {
+                const isActive = activeScenicIndex === idx;
+                const IconComp = course.icon;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveScenicIndex(idx)}
+                    className={`shrink-0 px-4 py-2.5 rounded-full text-xs font-serif transition-transform duration-300 flex items-center gap-2 cursor-pointer hover:-translate-y-1 ${
+                      isActive
+                        ? 'bg-[#84654D] text-white shadow-md font-medium'
+                        : 'bg-white text-deep-ink/75 border border-[#E3DED4] shadow-2xs'
+                    }`}
+                  >
+                    <IconComp size={13} className={isActive ? 'text-white' : 'text-[#84654D]'} />
+                    <span className="font-sans font-bold text-[11px] opacity-80">{course.step}</span>
+                    <span className="text-inherit whitespace-nowrap">{language === 'en' ? course.titleEn : course.titleKo.split(' ')[0] + ' ' + (course.titleKo.split(' ')[1] || '')}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Focused Course Spotlight Card */}
@@ -2879,6 +3216,9 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
                         </div>
 
                         <div className="flex items-center gap-3">
+                          <span className="text-xs font-sans text-deep-ink/50 font-medium">
+                            0{activeScenicIndex + 1} / 0{scenicCourses.length}
+                          </span>
                           <div className="flex items-center gap-1.5">
                             {scenicCourses.map((_, dotIdx) => (
                               <button
@@ -2892,9 +3232,6 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
                               />
                             ))}
                           </div>
-                          <span className="text-xs font-sans text-deep-ink/50 font-medium">
-                            0{activeScenicIndex + 1} / 0{scenicCourses.length}
-                          </span>
                         </div>
                       </div>
                     </div>
@@ -2905,6 +3242,22 @@ const LocationPage = ({ language = 'ko' }: { language?: Language }) => {
           </div>
         </div>
       </section>
+
+      {/* Toast Notification when copied */}
+      <AnimatePresence>
+        {copied && (
+          <motion.div
+            initial={{ opacity: 0, y: 15, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 15, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="fixed bottom-24 sm:bottom-28 left-1/2 -translate-x-1/2 z-50 bg-[#33241B] text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 border border-white/20 text-xs font-serif font-medium tracking-wide pointer-events-none"
+          >
+            <Check size={14} className="text-[#84654D] bg-white rounded-full p-0.5" />
+            <span>{language === 'en' ? 'Address copied to clipboard' : '주소가 복사되었습니다'}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -2941,7 +3294,7 @@ const ExperiencePage = ({
             : '은은한 차의 온기를 오래 지켜주는 백자 다관에 차를 천천히 따르며 여유를 느껴보세요.' 
         },
         { 
-          label: language === 'en' ? '3 Signature Tea Tasting' : '시그니처 잎차 3종 테이스팅', 
+          label: language === 'en' ? 'Signature Tea Tasting' : '시그니처 잎차 테이스팅', 
           desc: language === 'en' 
             ? 'Choose among coastal pine, persimmon leaf, and buckwheat blends to match your morning mood.' 
             : '솔잎차, 감물차, 메밀차 중 오늘의 기분에 어울리는 차를 골라 그윽한 향을 음미해보세요.' 
@@ -2987,7 +3340,7 @@ const ExperiencePage = ({
             : '먼저 다녀간 이들의 따뜻한 문장을 읽어보고, 나만의 다정한 이야기도 함께 남겨보세요.' 
         },
         { 
-          label: language === 'en' ? 'Starlight Study & Vinyl Record' : '별빛 사색 서재 & LP 턴테이블', 
+          label: language === 'en' ? 'Study & Vinyl Record' : '서재 & LP 턴테이블', 
           desc: language === 'en' 
             ? 'Place a curated vinyl record on the turntable and turn pages by the scenic ocean window.' 
             : '마음에 드는 LP 음악을 턴테이블에 올리고, 파도 소리와 함께 시집의 책장을 넘겨보세요.' 
@@ -3050,28 +3403,60 @@ const ExperiencePage = ({
         image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=80"
       />
       
-      <div id="timeless-experiences" className="max-w-7xl mx-auto px-6 md:px-12 pt-16 md:pt-24 pb-20 md:pb-28 space-y-12">
+      <div id="timeless-experiences" className="max-w-7xl mx-auto px-6 md:px-12 pt-16 md:pt-24 pb-20 md:pb-28 md:max-lg:pt-14 space-y-12">
         
         {/* Switcher Header without 'ritual' word */}
         <div className="text-center space-y-3 max-w-2xl mx-auto flex flex-col items-center justify-center">
           <span className="text-[13px] uppercase tracking-wider text-[#84654D] font-cormorant font-bold block">
             TIMELESS HEALING EXPERIENCES
           </span>
-          <h2 className="text-2xl md:text-3xl font-serif leading-tight text-deep-ink font-light">
-            {language === 'en' ? "Yunseul Stay Signature Healing Programs" : "윤슬 스테이 시그니처 힐링 프로그램"}
+          <h2 className="text-[24px] md:text-[28px] font-serif leading-tight text-deep-ink font-light">
+            {language === 'en' ? (
+              <><span className="hidden md:inline">Yunseul Stay </span>Signature Healing Programs</>
+            ) : (
+              <><span className="hidden md:inline">윤슬 스테이 </span>시그니처 힐링 프로그램</>
+            )}
           </h2>
           <p className="text-[13px] text-deep-ink/65 font-serif leading-relaxed font-light">
             {language === 'en'
               ? 'Three curated healing programs designed to help you relax and focus entirely on your wellness.'
-              : '오롯이 나에게 집중하며 심신의 피로를 비워내는 3가지 핵심 힐링 프로그램입니다.'}
+              : (
+                <>
+                  <span className="hidden md:inline">오롯이 나에게 집중하며 </span>심신의 피로를 비워내는 3가지 핵심 <span className="hidden md:inline">힐링 </span>프로그램입니다.
+                </>
+              )}
           </p>
           <div className="w-12 h-px bg-[#84654D] mt-2" />
         </div>
 
-        {/* Side-by-Side: Left Column (Buttons) & Right Column (Card Box) */}
+        {/* Mobile & Tablet Program Pill Buttons (matching SCENIC TRAILS & DRIVE) */}
+        <div className="lg:hidden w-full flex items-center justify-start md:justify-center gap-2.5 overflow-x-auto pb-3 px-4 sm:px-6 [scrollbar-width:thin] [scrollbar-color:#BFAF9F_#EDE7DF] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-[#EDE7DF] [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#BFAF9F] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-button]:hidden">
+          {rituals.map((r) => {
+            const isSelected = activeTab === r.id;
+            const IconComp = r.icon;
+            return (
+              <button
+                key={r.id}
+                type="button"
+                onClick={() => setActiveTab(r.id)}
+                className={`shrink-0 px-4 py-2.5 rounded-full text-xs font-serif transition-transform duration-300 flex items-center gap-2 cursor-pointer hover:-translate-y-1 ${
+                  isSelected
+                    ? 'bg-[#84654D] text-white shadow-md font-medium'
+                    : 'bg-white text-deep-ink/75 border border-[#E3DED4] shadow-2xs'
+                }`}
+              >
+                <IconComp size={13} className={isSelected ? 'text-white' : 'text-[#84654D]'} />
+                <span className="font-sans font-bold text-[11px] opacity-80">{r.num}</span>
+                <span className="text-inherit whitespace-nowrap">{r.title}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Side-by-Side: Left Column (Buttons on PC) & Right Column (Card Box) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: 3 Vertical Program Selectors */}
-          <div className="lg:col-span-4 flex flex-col gap-3.5">
+          {/* PC Program Selectors (kept intact for desktop) */}
+          <div className="hidden lg:flex lg:flex-col lg:col-span-4 gap-3.5">
             {rituals.map((r) => {
               const IconComp = r.icon;
               const isSelected = activeTab === r.id;
@@ -3101,7 +3486,7 @@ const ExperiencePage = ({
                       </span>
                     </div>
                     <span className="text-[12px] font-serif font-light text-[#84654D]">
-                      0{r.num}
+                      {r.num}
                     </span>
                   </div>
                   <div className="space-y-1 pt-1 pl-1">
@@ -3117,8 +3502,8 @@ const ExperiencePage = ({
             })}
           </div>
 
-          {/* Right Column: Detailed Card Box Showcase */}
-          <div className="lg:col-span-8 bg-white rounded-3xl border border-[#E3DED4] shadow-sm overflow-hidden p-5 sm:p-6 md:p-10">
+          {/* Detailed Card Box Showcase (full width on mobile/tablet, 8 cols on PC) */}
+          <div className="w-full lg:col-span-8 bg-white rounded-3xl border border-[#E3DED4] shadow-sm overflow-hidden p-5 sm:p-6 md:p-10">
             <AnimatePresence mode="wait">
               {rituals.map((r) => {
                 if (activeTab !== r.id) return null;
@@ -3164,7 +3549,7 @@ const ExperiencePage = ({
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
                         {r.highlights.map((item, hIdx) => (
                           <div key={hIdx} className="p-3.5 sm:p-4 bg-[#F7F5F0] rounded-2xl border border-[#E3DED4]/80 space-y-1.5">
-                            <h5 className="text-[13px] sm:text-[12.5px] font-serif font-bold text-deep-ink break-keep">{item.label}</h5>
+                            <h5 className="text-[13px] sm:text-[12.5px] font-serif font-bold text-deep-ink break-keep whitespace-nowrap">{item.label}</h5>
                             <p className="text-[12px] sm:text-[11.5px] text-deep-ink/75 font-serif leading-relaxed font-light break-keep">{item.desc}</p>
                           </div>
                         ))}
@@ -3174,8 +3559,8 @@ const ExperiencePage = ({
                 );
               })}
             </AnimatePresence>
-          </div>
         </div>
+      </div>
 
       </div>
     </div>
@@ -3185,15 +3570,9 @@ const ExperiencePage = ({
 // --- Main App ---
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>(() => {
-    return (localStorage.getItem('currentPage') as Page) || 'home';
-  });
-  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(() => {
-    return localStorage.getItem('selectedRoomId') || null;
-  });
-  const [experienceTab, setExperienceTab] = useState<'tea' | 'guestbook' | 'sound'>(() => {
-    return (localStorage.getItem('experienceTab') as 'tea' | 'guestbook' | 'sound') || 'tea';
-  });
+  const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+  const [experienceTab, setExperienceTab] = useState<'tea' | 'guestbook' | 'sound'>('tea');
   const [language] = useState<Language>('ko');
   const [refreshKey, setRefreshKey] = useState<number>(0);
 
@@ -3209,7 +3588,6 @@ export default function App() {
     forceRefresh: boolean = false
   ) => {
     const targetPage = p === 'story' ? 'home' : p;
-    localStorage.setItem('currentPage', targetPage);
     setCurrentPage(targetPage);
     
     // Increment refreshKey whenever forceRefresh is set or when clicking the current page's menu
@@ -3218,17 +3596,13 @@ export default function App() {
     }
     
     if (targetPage !== 'rooms') {
-      localStorage.removeItem('selectedRoomId');
       setSelectedRoomId(null);
     } else if (roomId) {
-      localStorage.setItem('selectedRoomId', roomId);
       setSelectedRoomId(roomId);
     } else {
-      localStorage.removeItem('selectedRoomId');
       setSelectedRoomId(null);
     }
     
-    localStorage.setItem('experienceTab', expTab);
     setExperienceTab(expTab);
     
     const scrollTarget = p === 'story' ? 'story-section' : targetId;
@@ -3311,11 +3685,6 @@ export default function App() {
               <RoomsPage 
                 selectedRoomId={selectedRoomId} 
                 setSelectedRoomId={(id) => {
-                  if (id) {
-                    localStorage.setItem('selectedRoomId', id);
-                  } else {
-                    localStorage.removeItem('selectedRoomId');
-                  }
                   setSelectedRoomId(id);
                 }} 
                 onNavigate={handleNavigate}
@@ -3356,7 +3725,6 @@ export default function App() {
               <ExperiencePage 
                 activeTab={experienceTab} 
                 setActiveTab={(t) => {
-                  localStorage.setItem('experienceTab', t);
                   setExperienceTab(t);
                 }} 
                 language={language}

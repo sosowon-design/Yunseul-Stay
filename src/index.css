@@ -22,6 +22,11 @@
 }
 
 @layer base {
+  html, body {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
   body {
     @apply bg-pure-white text-deep-ink antialiased font-serif;
     font-family: "Noto Serif KR", "Noto Serif", serif;
@@ -30,11 +35,14 @@
     letter-spacing: 0.005em;
     background-color: #F7F5F0;
     color: #282522;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   h1, h2, h3, h4, h5, h6, .serif {
     @apply font-serif font-light tracking-[0.02em];
     font-family: "Noto Serif KR", "Noto Serif", serif;
+    word-break: keep-all;
   }
 }
 
@@ -77,6 +85,12 @@
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
     @apply bg-[#7B6248]/25 rounded-full;
+  }
+
+  ::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
 }
 
